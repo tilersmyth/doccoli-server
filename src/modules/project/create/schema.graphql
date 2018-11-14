@@ -1,0 +1,9 @@
+type createProjectResponse {
+  ok: Boolean!
+  id: String
+  errors: [String!]
+}
+
+type Mutation {
+  createProject(name: String!, slug: String): createProjectResponse!
+}

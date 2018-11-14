@@ -2,8 +2,6 @@ import * as jwt from "jsonwebtoken";
 
 import { User } from "../../entity/User";
 
-import { notAuthorized } from "./utils/errorMessages";
-
 export const cliAuth = async (
   resolve: any,
   parent: any,
@@ -16,7 +14,7 @@ export const cliAuth = async (
   try {
     if (!token) {
       // user is not logged in
-      throw notAuthorized;
+      return null;
     }
 
     const decoded = jwt.verify(token, process.env
@@ -25,12 +23,13 @@ export const cliAuth = async (
     const user = await User.findOne({ where: { id: decoded.user } });
 
     if (!user) {
-      throw notAuthorized;
+      return null;
     }
 
     args.user = user;
   } catch (err) {
-    return { ok: false, errors: [err] };
+    console.log(err);
+    return null;
   }
 
   return resolve(parent, args, context, info);
