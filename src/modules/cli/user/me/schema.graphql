@@ -1,0 +1,9 @@
+type cliMeResponse {
+  ok: Boolean!
+  me: User
+  errors: [String!]
+}
+
+type Query {
+  cliMe: cliMeResponse!
+}

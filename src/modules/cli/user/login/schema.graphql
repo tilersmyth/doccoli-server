@@ -1,0 +1,8 @@
+type cliLoginResponse {
+  token: String
+  errors: [Error!]
+}
+
+type Mutation {
+  cliLogin(email: String!, password: String!): cliLoginResponse!
+}

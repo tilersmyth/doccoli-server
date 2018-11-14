@@ -22,22 +22,15 @@ column: number;
 
 interface IQuery {
 __typename: "Query";
-dummy2: string | null;
-bye2: string | null;
-dummy: string | null;
 me: IUser | null;
-bye: string | null;
-hello: string;
-}
-
-interface IHelloOnQueryArguments {
-name?: string | null;
 }
 
 interface IUser {
 __typename: "User";
 id: string;
 email: string;
+firstName: string;
+lastName: string;
 }
 
 interface IMutation {
@@ -64,6 +57,8 @@ password: string;
 }
 
 interface IRegisterOnMutationArguments {
+firstName: string;
+lastName: string;
 email: string;
 password: string;
 }

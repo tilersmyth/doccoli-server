@@ -4,12 +4,17 @@ import {
   Column,
   BaseEntity,
   PrimaryGeneratedColumn,
-  BeforeInsert
+  BeforeInsert,
+  CreateDateColumn
 } from "typeorm";
 
 @Entity("users")
 export class User extends BaseEntity {
   @PrimaryGeneratedColumn("uuid") id: string;
+
+  @Column("text") firstName: string;
+
+  @Column("text") lastName: string;
 
   @Column("varchar", { length: 255 })
   email: string;
@@ -21,6 +26,8 @@ export class User extends BaseEntity {
 
   @Column("boolean", { default: false })
   forgotPasswordLocked: boolean;
+
+  @CreateDateColumn() createdAt: Date;
 
   @BeforeInsert()
   async hashPasswordBeforeInsert() {
