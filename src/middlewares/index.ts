@@ -4,5 +4,8 @@ export const middleware = {
   Query: {
     cliMe: cliAuth,
     cliUserProjects: cliAuth
+  },
+  Mutation: {
+    cliCreateProject: cliAuth
   }
 };

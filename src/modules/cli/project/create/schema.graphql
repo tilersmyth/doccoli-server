@@ -1,0 +1,9 @@
+type cliCreateProjectResponse {
+  ok: Boolean!
+  project: Project
+  error: String
+}
+
+type Mutation {
+  cliCreateProject(name: String!): cliCreateProjectResponse!
+}
