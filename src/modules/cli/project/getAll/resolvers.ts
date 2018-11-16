@@ -3,7 +3,7 @@ import { Project } from "../../../../entity/Project";
 
 export const resolvers: ResolverMap = {
   Query: {
-    cliUserProjects: async (_, { user }: any) => {
+    cliUserProjects: async (_, __, { user }: any) => {
       if (!user) {
         return [];
       }

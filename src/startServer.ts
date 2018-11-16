@@ -12,7 +12,7 @@ import { confirmEmail } from "./routes/confirmEmail";
 import { genSchema } from "./utils/genSchema";
 import { redisSessionPrefix } from "./constants";
 import { createTestConn } from "./testUtils/createTestConn";
-import { middleware } from "./middlewares";
+import { cliUserAuth, projectAuth } from "./middlewares";
 
 const SESSION_SECRET = "ajslkjalksjdfkl";
 const RedisStore = connectRedis(session as any);
@@ -30,7 +30,7 @@ export const startServer = async () => {
       session: request.session,
       req: request
     }),
-    middlewares: [middleware]
+    middlewares: [projectAuth, cliUserAuth]
   });
 
   server.express.use(

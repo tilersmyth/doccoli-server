@@ -2,7 +2,7 @@ import * as jwt from "jsonwebtoken";
 
 import { User } from "../../entity/User";
 
-export const cliAuth = async (
+export const cliUserAuthMiddleware = async (
   resolve: any,
   parent: any,
   args: any,
@@ -26,7 +26,7 @@ export const cliAuth = async (
       return null;
     }
 
-    args.user = user;
+    context.user = user;
   } catch (err) {
     console.log(err);
     return null;

@@ -8,7 +8,7 @@ import { slugGenerator } from "../../../../utils/slugGenerator";
 
 export const resolvers: ResolverMap = {
   Mutation: {
-    cliCreateProject: async (_, { user, name }: any) => {
+    cliCreateProject: async (_, { name }: any, { user }: any) => {
       if (!user) {
         return { ok: false, error: "not authenticated" };
       }

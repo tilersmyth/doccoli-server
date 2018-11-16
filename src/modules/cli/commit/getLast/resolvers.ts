@@ -2,14 +2,11 @@ import { getConnection } from "typeorm";
 
 import { ResolverMap } from "../../../../types/graphql-utils";
 import { Commit } from "../../../../entity/Commit";
-import { Project } from "../../../../entity/Project";
 
 export const resolvers: ResolverMap = {
   Query: {
-    cliLastCommit: async (_, { projectId }: any) => {
+    cliLastCommit: async (_, __, { project }: any) => {
       try {
-        const project = await Project.findOne({ where: { key: projectId } });
-
         if (!project) {
           throw "project not found";
         }
