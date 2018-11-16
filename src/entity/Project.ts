@@ -9,6 +9,7 @@ import {
 } from "typeorm";
 
 import { Team } from "./Team";
+import { Commit } from "./Commit";
 
 @Entity("projects")
 export class Project extends BaseEntity {
@@ -36,4 +37,7 @@ export class Project extends BaseEntity {
 
   @OneToMany(() => Team, team => team.project)
   teams: Team[];
+
+  @OneToMany(() => Commit, commit => commit.project)
+  commits: Commit[];
 }

@@ -1,0 +1,3 @@
+type Mutation {
+  createCommit(projectId: ID!, sha: String!, branch: String!): Boolean!
+}

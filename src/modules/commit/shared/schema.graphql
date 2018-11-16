@@ -1,0 +1,5 @@
+type Commit {
+  id: ID!
+  sha: String!
+  branch: String!
+}
