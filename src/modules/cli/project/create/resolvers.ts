@@ -9,13 +9,13 @@ import { slugGenerator } from "../../../../utils/slugGenerator";
 export const resolvers: ResolverMap = {
   Mutation: {
     cliCreateProject: async (_, { name }: any, { user }: any) => {
-      if (!user) {
-        return { ok: false, error: "not authenticated" };
-      }
-
-      const slug = await slugGenerator(name, Project);
-
       try {
+        if (!user) {
+          throw "user not authenticated";
+        }
+
+        const slug = await slugGenerator(name, Project);
+
         return await getConnection().transaction(
           async transactionalEntityManager => {
             const project = Project.create({
@@ -33,17 +33,11 @@ export const resolvers: ResolverMap = {
 
             await transactionalEntityManager.save(team);
 
-            return {
-              ok: true,
-              project: response
-            };
+            return response;
           }
         );
-      } catch (e) {
-        return {
-          ok: false,
-          error: "Server error"
-        };
+      } catch (err) {
+        throw err;
       }
     }
   }

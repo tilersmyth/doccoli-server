@@ -3,18 +3,7 @@ import * as jwt from "jsonwebtoken";
 
 import { ResolverMap } from "../../../../types/graphql-utils";
 import { User } from "../../../../entity/User";
-import {
-  invalidLogin,
-  confirmEmailError,
-  forgotPasswordLockedError
-} from "../../utils/errorMessages";
-
-const errorResponse = [
-  {
-    path: "email",
-    message: invalidLogin
-  }
-];
+import { invalidLogin } from "../../utils/errorMessages";
 
 export const resolvers: ResolverMap = {
   Mutation: {
@@ -22,35 +11,13 @@ export const resolvers: ResolverMap = {
       const user = await User.findOne({ where: { email } });
 
       if (!user) {
-        return { errors: errorResponse };
-      }
-
-      if (!user.confirmed) {
-        return {
-          errors: [
-            {
-              path: "email",
-              message: confirmEmailError
-            }
-          ]
-        };
-      }
-
-      if (user.forgotPasswordLocked) {
-        return {
-          errors: [
-            {
-              path: "email",
-              message: forgotPasswordLockedError
-            }
-          ]
-        };
+        return { error: invalidLogin };
       }
 
       const valid = await bcrypt.compare(password, user.password);
 
       if (!valid) {
-        return { errors: errorResponse };
+        return { error: invalidLogin };
       }
 
       const token = jwt.sign({ user: user.id }, process.env
