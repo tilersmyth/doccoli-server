@@ -20,6 +20,15 @@ export class Commit extends BaseEntity {
   @Column("text")
   branch: string;
 
+  @Column()
+  index: number;
+
+  @Column()
+  size: number;
+
+  @Column({ default: false })
+  complete: boolean;
+
   @CreateDateColumn()
   createdAt: Date;
 

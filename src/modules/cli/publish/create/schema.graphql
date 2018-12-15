@@ -1,0 +1,62 @@
+input ModuleChildParameters {
+  name: String!
+  type: ModuleChildType
+}
+
+input ModuleChildSignature {
+  name: String!
+  kind: String!
+  type: ModuleChildType!
+  comment: ModuleChildComment
+  parameters: [ModuleChildParameters!]
+  typeParameter: [ModuleChildParameters!]
+}
+
+input ModuleChildType {
+  type: String!
+  name: String
+  refPath: String
+  types: [ModuleChildType!]
+}
+
+input ModuleChildComment {
+  shortText: String
+  text: String
+}
+
+input ModuleChildren {
+  name: String!
+  comment: ModuleChildComment
+  children: [ModuleChildren!]
+  type: ModuleChildType
+  indexSignature: ModuleChildSignature
+  getSignature: ModuleChildSignature
+  signatures: [ModuleChildSignature!]
+  typeParameter: [ModuleChildParameters!]
+}
+
+input ModuleFile {
+  name: String!
+  kind: String
+  path: String!
+  children: [ModuleChildren!]
+}
+
+input ModuleCommit {
+  sha: String!
+  branch: String!
+}
+
+input PublishProgress {
+  size: Int!
+  index: Int!
+}
+
+type Mutation {
+  cliPublishCreate(
+    projectId: String!
+    file: ModuleFile!
+    commit: ModuleCommit!
+    progress: PublishProgress!
+  ): Boolean!
+}

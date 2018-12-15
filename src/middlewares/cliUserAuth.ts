@@ -7,6 +7,7 @@ export const cliUserAuth = {
     cliLastCommit: cliUserAuthMiddleware
   },
   Mutation: {
-    cliCreateProject: cliUserAuthMiddleware
+    cliCreateProject: cliUserAuthMiddleware,
+    cliPublishCreate: cliUserAuthMiddleware
   }
 };

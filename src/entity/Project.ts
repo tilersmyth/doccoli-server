@@ -5,11 +5,13 @@ import {
   PrimaryGeneratedColumn,
   OneToMany,
   UpdateDateColumn,
-  Generated
+  Generated,
+  CreateDateColumn
 } from "typeorm";
 
 import { Team } from "./Team";
 import { Commit } from "./Commit";
+import { File } from "./File";
 
 @Entity("projects")
 export class Project extends BaseEntity {
@@ -32,6 +34,9 @@ export class Project extends BaseEntity {
   @Column("boolean", { default: false })
   active: boolean;
 
+  @CreateDateColumn()
+  createdAt: Date;
+
   @UpdateDateColumn()
   updatedAt?: Date;
 
@@ -40,4 +45,7 @@ export class Project extends BaseEntity {
 
   @OneToMany(() => Commit, commit => commit.project)
   commits: Commit[];
+
+  @OneToMany(() => File, file => file.project)
+  files: File[];
 }
