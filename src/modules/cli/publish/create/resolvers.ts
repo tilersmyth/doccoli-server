@@ -4,6 +4,7 @@ import { ResolverMap } from "../../../../types/graphql-utils";
 
 import { ModuleFile } from "./components/ModuleFile";
 import { ModuleCommit } from "./components/ModuleCommit";
+import { ModuleChildren } from "./components/ModuleChildren";
 
 interface PublishArgs {
   file: any;
@@ -23,20 +24,36 @@ export const resolvers: ResolverMap = {
           throw "user not authenticated";
         }
 
-        console.log("file", file);
-        console.log("commit", commit);
-        console.log("progress", progress);
-
         return await getConnection().transaction(async transaction => {
+          const moduleCommit = new ModuleCommit(
+            project,
+            commit,
+            progress,
+            transaction
+          );
+
+          const currentCommit = await moduleCommit.find();
+
+          if (currentCommit && currentCommit.index >= progress.index) {
+            return true;
+          }
+
           const savedFile = await new ModuleFile(
             project,
             file,
             transaction
           ).save();
 
-          console.log("SAVED!!", savedFile);
+          for (const children of file.children) {
+            await new ModuleChildren(
+              savedFile,
+              children,
+              null,
+              transaction
+            ).save();
+          }
 
-          await new ModuleCommit(project, commit, progress, transaction).save();
+          await moduleCommit.save(currentCommit);
 
           return true;
         });

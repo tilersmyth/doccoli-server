@@ -29,15 +29,15 @@ export class ModuleParameter extends BaseEntity {
 
   @OneToOne(() => ModuleType, { nullable: true })
   @JoinColumn()
-  type: ModuleType;
+  type: ModuleType | null;
 
   @ManyToOne(() => ModuleSignature, sig => sig.parameters, { nullable: true })
-  paramSig: ModuleSignature;
+  signature: ModuleSignature;
 
   @ManyToOne(() => ModuleSignature, sig => sig.typeParameter, {
     nullable: true
   })
-  paramTypeSig: ModuleSignature;
+  typeSignature: ModuleSignature;
 
   @ManyToOne(() => Module, module => module.typeParameter, { nullable: true })
   module: Module;

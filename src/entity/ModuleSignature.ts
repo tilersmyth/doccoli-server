@@ -32,18 +32,20 @@ export class ModuleSignature extends BaseEntity {
   @UpdateDateColumn()
   updatedAt?: Date;
 
-  @OneToOne(() => ModuleComment)
+  @OneToOne(() => ModuleComment, { nullable: true })
   @JoinColumn()
-  comment: ModuleComment;
+  comment: ModuleComment | null;
 
-  @OneToOne(() => ModuleType)
+  @OneToOne(() => ModuleType, { nullable: true })
   @JoinColumn()
-  type: ModuleType;
+  type: ModuleType | null;
 
-  @OneToMany(() => ModuleParameter, param => param.paramSig, { nullable: true })
+  @OneToMany(() => ModuleParameter, param => param.signature, {
+    nullable: true
+  })
   parameters: ModuleParameter[];
 
-  @OneToMany(() => ModuleParameter, param => param.paramTypeSig, {
+  @OneToMany(() => ModuleParameter, param => param.typeSignature, {
     nullable: true
   })
   typeParameter: ModuleParameter[];

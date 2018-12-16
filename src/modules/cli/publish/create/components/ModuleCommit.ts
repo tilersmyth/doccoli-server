@@ -19,7 +19,7 @@ export class ModuleCommit {
     this.transaction = transaction;
   }
 
-  async save() {
+  async find() {
     try {
       const { sha, branch } = this.commit;
 
@@ -27,13 +27,22 @@ export class ModuleCommit {
         where: { project: this.project.id, sha, branch }
       });
 
+      if (commit && commit.complete) {
+        throw "commit already published";
+      }
+
+      return commit;
+    } catch (err) {
+      throw err;
+    }
+  }
+
+  async save(commit: any) {
+    try {
+      const { sha, branch } = this.commit;
       const { size, index } = this.progress;
 
       if (!commit) {
-        if (index > 0) {
-          throw "file publish sequence error";
-        }
-
         const newCommit = new Commit();
         newCommit.project = this.project;
         newCommit.sha = sha;

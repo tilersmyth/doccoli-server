@@ -10,7 +10,7 @@ export const resolvers: ResolverMap = {
         }
 
         return await Commit.findOne({
-          where: { project: project.id, branch },
+          where: { project: project.id, branch, complete: true },
           order: {
             createdAt: "DESC"
           }

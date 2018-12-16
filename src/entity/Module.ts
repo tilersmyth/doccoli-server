@@ -32,7 +32,7 @@ export class Module extends BaseEntity {
 
   @OneToOne(() => ModuleComment, { nullable: true })
   @JoinColumn()
-  comment: ModuleComment;
+  comment: ModuleComment | null;
 
   @ManyToOne(() => Module, module => module.children, { nullable: true })
   parent: Module;
@@ -42,15 +42,15 @@ export class Module extends BaseEntity {
 
   @OneToOne(() => ModuleType, { nullable: true })
   @JoinColumn()
-  type: ModuleType;
+  type: ModuleType | null;
 
   @OneToOne(() => ModuleSignature, { nullable: true })
   @JoinColumn()
-  indexSignature: ModuleSignature;
+  indexSignature: ModuleSignature | null;
 
   @OneToOne(() => ModuleSignature, { nullable: true })
   @JoinColumn()
-  getSignature: ModuleSignature;
+  getSignature: ModuleSignature | null;
 
   @OneToMany(() => ModuleSignature, moduleSig => moduleSig.module, {
     nullable: true

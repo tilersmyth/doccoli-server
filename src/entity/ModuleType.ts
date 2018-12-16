@@ -30,7 +30,7 @@ export class ModuleType extends BaseEntity {
   updatedAt?: Date;
 
   @ManyToOne(() => ModuleType, type => type.types, { nullable: true })
-  parentType: ModuleType;
+  parentType: ModuleType | null;
 
   @OneToMany(() => ModuleType, types => types.parentType, { nullable: true })
   types: ModuleType[];
