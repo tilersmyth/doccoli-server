@@ -1,45 +1,45 @@
-input ModuleChildParameters {
+input ModuleChildParametersInput {
   name: String!
-  type: ModuleChildType
+  type: ModuleChildTypeInput
 }
 
-input ModuleChildSignature {
+input ModuleChildSignatureInput {
   name: String!
   kind: String!
-  type: ModuleChildType!
-  comment: ModuleChildComment
-  parameters: [ModuleChildParameters!]
-  typeParameter: [ModuleChildParameters!]
+  type: ModuleChildTypeInput!
+  comment: ModuleChildCommentInput
+  parameters: [ModuleChildParametersInput!]
+  typeParameter: [ModuleChildParametersInput!]
 }
 
-input ModuleChildType {
+input ModuleChildTypeInput {
   type: String!
   name: String
   refPath: String
-  types: [ModuleChildType!]
+  types: [ModuleChildTypeInput!]
 }
 
-input ModuleChildComment {
+input ModuleChildCommentInput {
   shortText: String
   text: String
 }
 
-input ModuleChildren {
+input ModuleChildrenInput {
   name: String!
-  comment: ModuleChildComment
-  children: [ModuleChildren!]
-  type: ModuleChildType
-  indexSignature: ModuleChildSignature
-  getSignature: ModuleChildSignature
-  signatures: [ModuleChildSignature!]
-  typeParameter: [ModuleChildParameters!]
+  comment: ModuleChildCommentInput
+  children: [ModuleChildrenInput!]
+  type: ModuleChildTypeInput
+  indexSignature: ModuleChildSignatureInput
+  getSignature: ModuleChildSignatureInput
+  signatures: [ModuleChildSignatureInput!]
+  typeParameter: [ModuleChildParametersInput!]
 }
 
-input ModuleFile {
+input ModuleFileInput {
   name: String!
   kind: String
   path: String!
-  children: [ModuleChildren!]
+  children: [ModuleChildrenInput!]
 }
 
 input ModuleCommit {
@@ -55,7 +55,7 @@ input PublishProgress {
 type Mutation {
   cliPublishCreate(
     projectId: String!
-    file: ModuleFile!
+    file: ModuleFileInput!
     commit: ModuleCommit!
     progress: PublishProgress!
   ): Boolean!

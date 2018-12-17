@@ -2,9 +2,8 @@ import { getConnection } from "typeorm";
 
 import { ResolverMap } from "../../../../types/graphql-utils";
 
-import { ModuleFile } from "./components/ModuleFile";
-import { ModuleCommit } from "./components/ModuleCommit";
-import { ModuleChildren } from "./components/ModuleChildren";
+import { ModuleFileNode, ModuleChildrenNode } from "./components/nodes";
+import { PublishCommit } from "./components/PublishCommit";
 
 interface PublishArgs {
   file: any;
@@ -25,7 +24,7 @@ export const resolvers: ResolverMap = {
         }
 
         return await getConnection().transaction(async transaction => {
-          const moduleCommit = new ModuleCommit(
+          const moduleCommit = new PublishCommit(
             project,
             commit,
             progress,
@@ -38,19 +37,16 @@ export const resolvers: ResolverMap = {
             return true;
           }
 
-          const savedFile = await new ModuleFile(
+          const savedFile = await new ModuleFileNode(
             project,
             file,
             transaction
           ).save();
 
           for (const children of file.children) {
-            await new ModuleChildren(
-              savedFile,
-              children,
-              null,
-              transaction
-            ).save();
+            await new ModuleChildrenNode(children, null, transaction).save(
+              savedFile
+            );
           }
 
           await moduleCommit.save(currentCommit);

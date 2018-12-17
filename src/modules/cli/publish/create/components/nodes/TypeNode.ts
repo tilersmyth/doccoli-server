@@ -1,7 +1,8 @@
 import { EntityManager } from "typeorm";
-import { ModuleType } from "../../../../../entity/ModuleType";
 
-export class Type {
+import { ModuleType } from "../../../../../../entity/modules/ModuleType";
+
+export class ModuleTypeNode {
   type: any;
   transaction: EntityManager;
 

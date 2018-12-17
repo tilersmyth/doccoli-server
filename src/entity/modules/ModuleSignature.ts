@@ -13,7 +13,7 @@ import {
 import { ModuleType } from "./ModuleType";
 import { ModuleParameter } from "./ModuleParameter";
 import { ModuleComment } from "./ModuleComment";
-import { Module } from "./Module";
+import { ModuleChildren } from "./ModuleChildren";
 
 @Entity("module_signatures")
 export class ModuleSignature extends BaseEntity {
@@ -40,7 +40,7 @@ export class ModuleSignature extends BaseEntity {
   @JoinColumn()
   type: ModuleType | null;
 
-  @OneToMany(() => ModuleParameter, param => param.signature, {
+  @OneToMany(() => ModuleParameter, parameters => parameters.signature, {
     nullable: true
   })
   parameters: ModuleParameter[];
@@ -50,6 +50,8 @@ export class ModuleSignature extends BaseEntity {
   })
   typeParameter: ModuleParameter[];
 
-  @ManyToOne(() => Module, module => module.signatures, { nullable: true })
-  module: Module;
+  @ManyToOne(() => ModuleChildren, module => module.signatures, {
+    nullable: true
+  })
+  module: ModuleChildren;
 }

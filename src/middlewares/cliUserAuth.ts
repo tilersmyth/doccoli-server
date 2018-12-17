@@ -4,7 +4,8 @@ export const cliUserAuth = {
   Query: {
     cliMe: cliUserAuthMiddleware,
     cliUserProjects: cliUserAuthMiddleware,
-    cliLastCommit: cliUserAuthMiddleware
+    cliLastCommit: cliUserAuthMiddleware,
+    cliFindOneFile: cliUserAuthMiddleware
   },
   Mutation: {
     cliCreateProject: cliUserAuthMiddleware,

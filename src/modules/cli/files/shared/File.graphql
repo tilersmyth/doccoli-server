@@ -1,0 +1,43 @@
+type ModuleChildParameters {
+  name: String!
+  type: ModuleChildType
+}
+
+type ModuleChildSignature {
+  name: String!
+  kind: String!
+  type: ModuleChildType!
+  comment: ModuleChildComment
+  parameters: [ModuleChildParameters!]
+  typeParameter: [ModuleChildParameters!]
+}
+
+type ModuleChildType {
+  type: String!
+  name: String
+  refPath: String
+  types: [ModuleChildType!]
+}
+
+type ModuleChildComment {
+  shortText: String
+  text: String
+}
+
+type ModuleChildren {
+  name: String!
+  comment: ModuleChildComment
+  children: [ModuleChildren!]
+  type: ModuleChildType
+  indexSignature: ModuleChildSignature
+  getSignature: ModuleChildSignature
+  signatures: [ModuleChildSignature!]
+  typeParameter: [ModuleChildParameters!]
+}
+
+type ModuleFile {
+  name: String!
+  kind: String
+  path: String!
+  children: [ModuleChildren!]
+}

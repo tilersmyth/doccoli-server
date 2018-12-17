@@ -11,13 +11,13 @@ import {
   JoinColumn
 } from "typeorm";
 import { ModuleComment } from "./ModuleComment";
-import { File } from "./File";
+import { ModuleFile } from "./ModuleFile";
 import { ModuleType } from "./ModuleType";
 import { ModuleSignature } from "./ModuleSignature";
 import { ModuleParameter } from "./ModuleParameter";
 
-@Entity("modules")
-export class Module extends BaseEntity {
+@Entity("module_children")
+export class ModuleChildren extends BaseEntity {
   @PrimaryGeneratedColumn("uuid")
   id: string;
 
@@ -34,11 +34,13 @@ export class Module extends BaseEntity {
   @JoinColumn()
   comment: ModuleComment | null;
 
-  @ManyToOne(() => Module, module => module.children, { nullable: true })
-  parent: Module;
+  @ManyToOne(() => ModuleChildren, module => module.children, {
+    nullable: true
+  })
+  parent: ModuleChildren;
 
-  @OneToMany(() => Module, module => module.parent, { nullable: true })
-  children: Module[];
+  @OneToMany(() => ModuleChildren, module => module.parent, { nullable: true })
+  children: ModuleChildren[];
 
   @OneToOne(() => ModuleType, { nullable: true })
   @JoinColumn()
@@ -60,6 +62,6 @@ export class Module extends BaseEntity {
   @OneToMany(() => ModuleParameter, param => param.module, { nullable: true })
   typeParameter: ModuleParameter[];
 
-  @ManyToOne(() => File, file => file.modules, { nullable: true })
-  file: File;
+  @ManyToOne(() => ModuleFile, file => file.children, { nullable: true })
+  file: ModuleFile;
 }

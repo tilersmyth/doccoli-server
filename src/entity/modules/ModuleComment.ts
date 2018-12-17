@@ -13,10 +13,10 @@ export class ModuleComment extends BaseEntity {
   id: string;
 
   @Column("text", { nullable: true })
-  text: string;
+  text: string | null;
 
   @Column("text", { nullable: true })
-  shortText: string;
+  shortText: string | null;
 
   @CreateDateColumn()
   createdAt: Date;

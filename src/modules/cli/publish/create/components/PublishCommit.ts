@@ -1,7 +1,7 @@
 import { EntityManager } from "typeorm";
 import { Commit } from "../../../../../entity/Commit";
 
-export class ModuleCommit {
+export class PublishCommit {
   project: any;
   commit: { sha: string; branch: string };
   progress: { size: number; index: number };

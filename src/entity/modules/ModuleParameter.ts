@@ -11,7 +11,7 @@ import {
 } from "typeorm";
 import { ModuleType } from "./ModuleType";
 import { ModuleSignature } from "./ModuleSignature";
-import { Module } from "./Module";
+import { ModuleChildren } from "./ModuleChildren";
 
 @Entity("module_parameters")
 export class ModuleParameter extends BaseEntity {
@@ -39,6 +39,8 @@ export class ModuleParameter extends BaseEntity {
   })
   typeSignature: ModuleSignature;
 
-  @ManyToOne(() => Module, module => module.typeParameter, { nullable: true })
-  module: Module;
+  @ManyToOne(() => ModuleChildren, module => module.typeParameter, {
+    nullable: true
+  })
+  module: ModuleChildren;
 }

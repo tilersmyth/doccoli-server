@@ -1,8 +1,9 @@
 import { EntityManager } from "typeorm";
-import { ModuleParameter } from "../../../../../entity/ModuleParameter";
-import { Type } from "./Type";
 
-export class Parameter {
+import { ModuleParameter } from "../../../../../../entity/modules/ModuleParameter";
+import { ModuleTypeNode } from "./TypeNode";
+
+export class ModuleParameterNode {
   parameter: any;
   transaction: EntityManager;
 
@@ -15,7 +16,10 @@ export class Parameter {
     try {
       const parameter = new ModuleParameter();
       parameter.name = this.parameter.name;
-      parameter.type = await new Type(parameter.type, this.transaction).save();
+      parameter.type = await new ModuleTypeNode(
+        parameter.type,
+        this.transaction
+      ).save();
       return parameter;
     } catch (err) {
       throw err;
