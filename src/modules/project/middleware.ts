@@ -8,33 +8,37 @@ export const projectAuthMiddleware = async (
   context: any,
   info: any
 ) => {
-  if (!context.user) {
-    throw "user not authenticated";
-  }
-
-  const projectId = args.projectId;
-
   try {
+    if (context.error) {
+      throw context.error;
+    }
+
+    const key = context.req.get("ProjectKey");
+
     const team = await Team.findOne({
-      where: { projectId, userId: context.user.id }
+      where: { projectId: key, userId: context.user.id }
     });
 
     if (!team) {
-      throw new Error("not authorized for project");
+      throw {
+        path: "projectAuth",
+        message: "not authorized for project"
+      };
     }
 
     const project = await Project.findOne({
-      where: { key: projectId }
+      where: { key }
     });
 
     if (!project) {
-      throw "project not found";
+      throw { path: "projectNotFound", message: "project not found" };
     }
 
     context.project = project;
-  } catch (err) {
-    throw err;
-  }
 
-  return resolve(parent, args, context, info);
+    return resolve(parent, args, context, info);
+  } catch (err) {
+    context.error = err;
+    return resolve(parent, args, context, info);
+  }
 };

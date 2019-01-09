@@ -16,11 +16,11 @@ export const resolvers: ResolverMap = {
     cliPublishCreate: async (
       _,
       { file, commit, progress }: PublishArgs,
-      { user, project }: any
+      { project, error }: any
     ) => {
       try {
-        if (!user) {
-          throw "user not authenticated";
+        if (error) {
+          throw error;
         }
 
         return await getConnection().transaction(async transaction => {
@@ -34,7 +34,7 @@ export const resolvers: ResolverMap = {
           const currentCommit = await moduleCommit.find();
 
           if (currentCommit && currentCommit.index >= progress.index) {
-            return true;
+            return { created: true };
           }
 
           const savedFile = await new ModuleFileNode(
@@ -51,10 +51,10 @@ export const resolvers: ResolverMap = {
 
           await moduleCommit.save(currentCommit);
 
-          return true;
+          return { created: true };
         });
-      } catch (err) {
-        throw err;
+      } catch (error) {
+        return { error };
       }
     }
   }

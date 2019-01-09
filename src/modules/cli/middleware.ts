@@ -9,12 +9,15 @@ export const cliUserAuthMiddleware = async (
   context: any,
   info: any
 ) => {
-  const token = context.req.get("Authorization");
-
   try {
+    const token = context.req.get("Authorization");
+
     if (!token) {
       // user is not logged in
-      return null;
+      throw {
+        path: "userAuth",
+        message: "user not authenticated"
+      };
     }
 
     const decoded = jwt.verify(token, process.env
@@ -23,14 +26,17 @@ export const cliUserAuthMiddleware = async (
     const user = await User.findOne({ where: { id: decoded.user } });
 
     if (!user) {
-      return null;
+      throw {
+        path: "userAuth",
+        message: "user not authenticated"
+      };
     }
 
     context.user = user;
-  } catch (err) {
-    console.log(err);
-    return null;
-  }
 
-  return resolve(parent, args, context, info);
+    return resolve(parent, args, context, info);
+  } catch (err) {
+    context.error = err;
+    return resolve(parent, args, context, info);
+  }
 };

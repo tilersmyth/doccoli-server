@@ -1,3 +1,8 @@
+type cliUserProjectsResponse {
+  projects: [Project!]
+  error: Error
+}
+
 type Query {
-  cliUserProjects: [Project!]!
+  cliUserProjects: cliUserProjectsResponse!
 }

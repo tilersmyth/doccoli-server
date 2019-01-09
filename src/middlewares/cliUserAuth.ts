@@ -9,6 +9,7 @@ export const cliUserAuth = {
   },
   Mutation: {
     cliCreateProject: cliUserAuthMiddleware,
-    cliPublishCreate: cliUserAuthMiddleware
+    cliPublishCreate: cliUserAuthMiddleware,
+    updateAndFindAll: cliUserAuthMiddleware
   }
 };

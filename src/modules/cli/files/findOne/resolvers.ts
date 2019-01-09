@@ -15,6 +15,11 @@ export const resolvers: ResolverMap = {
           .andWhere("module_files.path = :path", { path: filePath })
           .leftJoinAndSelect("module_files.children", "children")
           .leftJoinAndSelect("children.comment", "comment")
+          .leftJoinAndSelect("children.typeParameter", "children_typeParameter")
+          .leftJoinAndSelect(
+            "children_typeParameter.type",
+            "children_typeParameter_type"
+          )
           .leftJoinAndSelect("children.children", "children2")
           .leftJoinAndSelect("children2.comment", "children2_comment")
           .leftJoinAndSelect("children2.signatures", "children2_signatures")

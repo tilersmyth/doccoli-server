@@ -3,21 +3,22 @@ import { Commit } from "../../../../entity/Commit";
 
 export const resolvers: ResolverMap = {
   Query: {
-    cliLastCommit: async (_, { branch }: any, { project }: any) => {
+    cliLastCommit: async (_, { branch }: any, { project, error }: any) => {
       try {
-        if (!project) {
-          throw "project not found";
+        if (error) {
+          throw error;
         }
 
-        return await Commit.findOne({
+        const commit = await Commit.findOne({
           where: { project: project.id, branch, complete: true },
           order: {
             createdAt: "DESC"
           }
         });
-      } catch (e) {
-        console.log("server error");
-        return null;
+
+        return { commit };
+      } catch (error) {
+        return { error };
       }
     }
   }

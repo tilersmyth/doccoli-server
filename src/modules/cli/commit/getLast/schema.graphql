@@ -1,3 +1,8 @@
+type cliLastCommitResponse {
+  commit: Commit
+  error: Error
+}
+
 type Query {
-  cliLastCommit(projectId: ID!, branch: String!): Commit
+  cliLastCommit(branch: String!): cliLastCommitResponse!
 }

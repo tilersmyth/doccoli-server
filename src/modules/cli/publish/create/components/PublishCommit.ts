@@ -49,6 +49,7 @@ export class PublishCommit {
         newCommit.branch = branch;
         newCommit.index = index;
         newCommit.size = size;
+        newCommit.complete = size === index ? true : false;
         await this.transaction.save(newCommit);
         return;
       }

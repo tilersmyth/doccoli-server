@@ -1,3 +1,8 @@
+type cliMeResponse {
+  user: User
+  error: Error
+}
+
 type Query {
-  cliMe: User
+  cliMe: cliMeResponse!
 }

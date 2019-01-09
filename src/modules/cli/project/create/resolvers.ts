@@ -8,10 +8,11 @@ import { slugGenerator } from "../../../../utils/slugGenerator";
 
 export const resolvers: ResolverMap = {
   Mutation: {
-    cliCreateProject: async (_, { name }: any, { user }: any) => {
+    cliCreateProject: async (_, { name }: any, { user, error }: any) => {
       try {
-        if (!user) {
-          throw "user not authenticated";
+        console.log("effer");
+        if (error) {
+          throw error;
         }
 
         const slug = await slugGenerator(name, Project);

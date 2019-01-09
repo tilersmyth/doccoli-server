@@ -52,11 +52,15 @@ input PublishProgress {
   index: Int!
 }
 
+type CliPublishProjectResponse {
+  created: Boolean
+  error: Error
+}
+
 type Mutation {
   cliPublishCreate(
-    projectId: String!
     file: ModuleFileInput!
     commit: ModuleCommit!
     progress: PublishProgress!
-  ): Boolean!
+  ): CliPublishProjectResponse!
 }

@@ -1,0 +1,15 @@
+type FileResponse {
+  path: String!
+}
+
+type updateAndFindAllResponse {
+  files: [FileResponse!]
+  error: Error
+}
+
+type Mutation {
+  updateAndFindAll(
+    renames: [String!]
+    deletes: [String!]
+  ): updateAndFindAllResponse!
+}
