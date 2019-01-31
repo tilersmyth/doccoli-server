@@ -26,11 +26,12 @@ input ModuleChildCommentInput {
 
 input ModuleChildrenInput {
   name: String!
+  tagged: Boolean
   comment: ModuleChildCommentInput
   children: [ModuleChildrenInput!]
   type: ModuleChildTypeInput
-  indexSignature: ModuleChildSignatureInput
-  getSignature: ModuleChildSignatureInput
+  indexSignature: [ModuleChildSignatureInput!]
+  getSignature: [ModuleChildSignatureInput!]
   signatures: [ModuleChildSignatureInput!]
   typeParameter: [ModuleChildParametersInput!]
 }

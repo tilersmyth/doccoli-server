@@ -10,7 +10,6 @@ export const resolvers: ResolverMap = {
   Mutation: {
     cliCreateProject: async (_, { name }: any, { user, error }: any) => {
       try {
-        console.log("effer");
         if (error) {
           throw error;
         }

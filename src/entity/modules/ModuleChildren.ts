@@ -24,6 +24,9 @@ export class ModuleChildren extends BaseEntity {
   @Column("text")
   name: string;
 
+  @Column({ default: false })
+  tagged: boolean;
+
   @CreateDateColumn()
   createdAt: Date;
 

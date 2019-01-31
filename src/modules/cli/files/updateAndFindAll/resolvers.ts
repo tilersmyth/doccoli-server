@@ -5,17 +5,12 @@ export const resolvers: ResolverMap = {
   Mutation: {
     updateAndFindAll: async (
       _,
-      { renames, deletes }: any,
+      { modified, deletes }: any,
       { project, error }: any
     ) => {
       try {
         if (error) {
           throw error;
-        }
-
-        // Update file names
-        if (renames.length > 0) {
-          console.log("update file names here");
         }
 
         // Delete (cascade) files
@@ -25,6 +20,7 @@ export const resolvers: ResolverMap = {
 
         const files = await ModuleFile.createQueryBuilder("module_files")
           .where("module_files.project = :id", { id: project.id })
+          .andWhere("module_files.path IN (:...modified)", { modified })
           .select(["module_files.path"])
           .getMany();
 

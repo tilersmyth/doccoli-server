@@ -24,7 +24,10 @@ export class ModuleChildrenNode {
       // Save child module
       const children = new ModuleChildren();
       const signature = new ModuleSignatureNode(this.transaction);
+
       children.name = this.children.name;
+      children.tagged = this.children.tagged;
+
       children.comment = await new ModuleCommentNode(
         this.children.comment,
         this.transaction

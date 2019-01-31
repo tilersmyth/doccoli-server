@@ -9,7 +9,7 @@ type updateAndFindAllResponse {
 
 type Mutation {
   updateAndFindAll(
-    renames: [String!]
+    modified: [String!]
     deletes: [String!]
   ): updateAndFindAllResponse!
 }
