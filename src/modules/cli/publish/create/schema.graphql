@@ -17,6 +17,7 @@ input ModuleChildTypeInput {
   name: String
   refPath: String
   types: [ModuleChildTypeInput!]
+  typeArguments: [ModuleChildTypeInput!]
 }
 
 input ModuleChildCommentInput {

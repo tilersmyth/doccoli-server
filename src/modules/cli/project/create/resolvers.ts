@@ -33,7 +33,7 @@ export const resolvers: ResolverMap = {
 
             await transactionalEntityManager.save(team);
 
-            return response;
+            return { project: response };
           }
         );
       } catch (err) {

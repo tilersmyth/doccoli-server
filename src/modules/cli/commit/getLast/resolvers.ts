@@ -3,7 +3,11 @@ import { Commit } from "../../../../entity/Commit";
 
 export const resolvers: ResolverMap = {
   Query: {
-    cliLastCommit: async (_, { branch }: any, { project, error }: any) => {
+    cliLastCommit: async (
+      _,
+      { branch }: any,
+      { project, error, user }: any
+    ) => {
       try {
         if (error) {
           throw error;
@@ -16,7 +20,7 @@ export const resolvers: ResolverMap = {
           }
         });
 
-        return { commit };
+        return { project, user, commit };
       } catch (error) {
         return { error };
       }

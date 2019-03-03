@@ -1,4 +1,15 @@
+type cliLastCommitProject {
+  name: String!
+}
+
+type cliLastCommitUser {
+  firstName: String!
+  lastName: String!
+}
+
 type cliLastCommitResponse {
+  project: cliLastCommitProject!
+  user: cliLastCommitUser!
   commit: Commit
   error: Error
 }
