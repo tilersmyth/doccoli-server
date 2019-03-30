@@ -33,6 +33,12 @@ export class ModuleChildren extends BaseEntity {
   @UpdateDateColumn()
   updatedAt?: Date;
 
+  @Column()
+  startCommit: string;
+
+  @Column({ nullable: true })
+  endCommit: string;
+
   @OneToOne(() => ModuleComment, { nullable: true })
   @JoinColumn()
   comment: ModuleComment | null;

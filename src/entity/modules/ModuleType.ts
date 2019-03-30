@@ -29,6 +29,12 @@ export class ModuleType extends BaseEntity {
   @UpdateDateColumn()
   updatedAt?: Date;
 
+  @Column()
+  startCommit: string;
+
+  @Column({ nullable: true })
+  endCommit: string;
+
   @ManyToOne(() => ModuleType, type => type.types, { nullable: true })
   parentType: ModuleType | null;
 

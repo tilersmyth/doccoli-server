@@ -4,10 +4,12 @@ import { ModuleParameter } from "../../../../../../entity/modules/ModuleParamete
 import { ModuleTypeNode } from "./TypeNode";
 
 export class ModuleParameterNode {
+  commit: any;
   parameter: any;
   transaction: EntityManager;
 
-  constructor(parameter: any, transaction: EntityManager) {
+  constructor(commit: any, parameter: any, transaction: EntityManager) {
+    this.commit = commit;
     this.parameter = parameter;
     this.transaction = transaction;
   }
@@ -17,6 +19,7 @@ export class ModuleParameterNode {
       const parameter = new ModuleParameter();
       parameter.name = this.parameter.name;
       parameter.type = await new ModuleTypeNode(
+        this.commit,
         parameter.type,
         this.transaction
       ).save();

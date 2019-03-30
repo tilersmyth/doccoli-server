@@ -4,9 +4,11 @@ import { ModuleSignature } from "../../../../../../entity/modules/ModuleSignatur
 import { ModuleCommentNode, ModuleTypeNode, ModuleParameterNode } from "./";
 
 export class ModuleSignatureNode {
+  commit: any;
   transaction: EntityManager;
 
-  constructor(transaction: EntityManager) {
+  constructor(commit: any, transaction: EntityManager) {
+    this.commit = commit;
     this.transaction = transaction;
   }
 
@@ -15,10 +17,12 @@ export class ModuleSignatureNode {
     newSignature.name = signature.name;
     newSignature.kind = signature.kind;
     newSignature.comment = await new ModuleCommentNode(
+      this.commit,
       signature.comment,
       this.transaction
     ).save();
     newSignature.type = await new ModuleTypeNode(
+      this.commit,
       signature.type,
       this.transaction
     ).save();
@@ -30,10 +34,12 @@ export class ModuleSignatureNode {
     if (signature.parameters) {
       for (const param of signature.parameters) {
         const parameter = await new ModuleParameterNode(
+          this.commit,
           param,
           this.transaction
         ).create();
 
+        parameter.startCommit = this.commit.id;
         parameter.signature = node;
 
         await this.transaction.save(parameter);
@@ -43,9 +49,11 @@ export class ModuleSignatureNode {
     if (signature.typeParameter) {
       for (const param of signature.typeParameter) {
         const parameter = await new ModuleParameterNode(
+          this.commit,
           param,
           this.transaction
         ).create();
+        parameter.startCommit = this.commit.id;
         parameter.typeSignature = node;
         await this.transaction.save(parameter);
       }
@@ -54,6 +62,7 @@ export class ModuleSignatureNode {
 
   private async insert(signature: any, module: any): Promise<ModuleSignature> {
     const newSignature = await this.create(signature);
+    newSignature.startCommit = this.commit.id;
     newSignature.module = module;
     const savedSignature = await this.transaction.save(newSignature);
     await this.parameters(savedSignature, signature);

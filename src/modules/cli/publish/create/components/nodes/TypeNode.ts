@@ -3,10 +3,12 @@ import { EntityManager } from "typeorm";
 import { ModuleType } from "../../../../../../entity/modules/ModuleType";
 
 export class ModuleTypeNode {
+  commit: any;
   type: any;
   transaction: EntityManager;
 
-  constructor(type: any, transaction: EntityManager) {
+  constructor(commit: any, type: any, transaction: EntityManager) {
+    this.commit = commit;
     this.type = type;
     this.transaction = transaction;
   }
@@ -37,6 +39,7 @@ export class ModuleTypeNode {
   ): Promise<ModuleType> {
     try {
       const newType = new ModuleType();
+      newType.startCommit = this.commit.id;
       newType.name = type.name;
       newType.type = type.type;
       newType.refPath = type.refPath;

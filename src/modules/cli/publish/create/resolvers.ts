@@ -43,13 +43,16 @@ export const resolvers: ResolverMap = {
             transaction
           ).save();
 
-          for (const children of file.children) {
-            await new ModuleChildrenNode(children, null, transaction).save(
-              savedFile
-            );
-          }
+          const commitModule = await moduleCommit.save(currentCommit);
 
-          await moduleCommit.save(currentCommit);
+          for (const children of file.children) {
+            await new ModuleChildrenNode(
+              commitModule,
+              children,
+              null,
+              transaction
+            ).save(savedFile);
+          }
 
           return { created: true };
         });

@@ -27,6 +27,12 @@ export class ModuleParameter extends BaseEntity {
   @UpdateDateColumn()
   updatedAt?: Date;
 
+  @Column()
+  startCommit: string;
+
+  @Column({ nullable: true })
+  endCommit: string;
+
   @OneToOne(() => ModuleType, { nullable: true })
   @JoinColumn()
   type: ModuleType | null;

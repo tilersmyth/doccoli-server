@@ -50,8 +50,7 @@ export class PublishCommit {
         newCommit.index = index;
         newCommit.size = size;
         newCommit.complete = size === index ? true : false;
-        await this.transaction.save(newCommit);
-        return;
+        return this.transaction.save(newCommit);
       }
 
       if (commit.size !== size) {
@@ -64,8 +63,7 @@ export class PublishCommit {
 
       commit.index = index;
 
-      await this.transaction.save(commit);
-      return;
+      return await this.transaction.save(commit);
     } catch (err) {
       throw err;
     }
