@@ -6,7 +6,8 @@ export const projectAuth = {
     cliFindOneFile: projectAuthMiddleware
   },
   Mutation: {
+    updateAndFindAll: projectAuthMiddleware,
     cliPublishCreate: projectAuthMiddleware,
-    updateAndFindAll: projectAuthMiddleware
+    cliPublishUpdateComment: projectAuthMiddleware
   }
 };

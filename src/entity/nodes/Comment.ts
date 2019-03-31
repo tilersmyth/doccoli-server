@@ -7,8 +7,8 @@ import {
   UpdateDateColumn
 } from "typeorm";
 
-@Entity("module_comments")
-export class ModuleComment extends BaseEntity {
+@Entity("comments_node")
+export class CommentNodeEntity extends BaseEntity {
   @PrimaryGeneratedColumn("uuid")
   id: string;
 

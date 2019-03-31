@@ -1,6 +1,6 @@
 import { EntityManager } from "typeorm";
 
-import { ModuleChildren } from "../../../../../../entity/modules/ModuleChildren";
+import { ChildrenNodeEntity } from "../../../../../../entity/nodes/Children";
 import {
   ModuleCommentNode,
   ModuleTypeNode,
@@ -29,7 +29,7 @@ export class ModuleChildrenNode {
   async save(file: any) {
     try {
       // Save child module
-      const children = new ModuleChildren();
+      const children = new ChildrenNodeEntity();
       const signature = new ModuleSignatureNode(this.commit, this.transaction);
 
       children.name = this.children.name;
@@ -63,7 +63,7 @@ export class ModuleChildrenNode {
             param,
             this.transaction
           ).create();
-          parameter.module = savedModule;
+          parameter.node = savedModule;
           await this.transaction.save(parameter);
         }
       }
@@ -73,10 +73,10 @@ export class ModuleChildrenNode {
 
       // Save child module children descendents
       if (this.children.children) {
-        for (const children of this.children.children) {
+        for (const child of this.children.children) {
           await new ModuleChildrenNode(
             this.commit,
-            children,
+            child,
             savedModule,
             this.transaction
           ).save(null);

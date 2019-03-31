@@ -1,6 +1,6 @@
 import { EntityManager } from "typeorm";
 
-import { ModuleSignature } from "../../../../../../entity/modules/ModuleSignature";
+import { SignatureNodeEntity } from "../../../../../../entity/nodes/Signature";
 import { ModuleCommentNode, ModuleTypeNode, ModuleParameterNode } from "./";
 
 export class ModuleSignatureNode {
@@ -12,8 +12,30 @@ export class ModuleSignatureNode {
     this.transaction = transaction;
   }
 
+  async save(
+    signature: any,
+    module?: any
+  ): Promise<SignatureNodeEntity | null> {
+    try {
+      if (!signature) {
+        return null;
+      }
+
+      if (Array.isArray(signature)) {
+        for (const sig of signature) {
+          await this.insert(sig, module);
+        }
+        return null;
+      }
+
+      return await this.insert(signature, module);
+    } catch (err) {
+      throw err;
+    }
+  }
+
   private async create(signature: any) {
-    const newSignature = new ModuleSignature();
+    const newSignature = new SignatureNodeEntity();
     newSignature.name = signature.name;
     newSignature.kind = signature.kind;
     newSignature.comment = await new ModuleCommentNode(
@@ -60,31 +82,15 @@ export class ModuleSignatureNode {
     }
   }
 
-  private async insert(signature: any, module: any): Promise<ModuleSignature> {
+  private async insert(
+    signature: any,
+    node: any
+  ): Promise<SignatureNodeEntity> {
     const newSignature = await this.create(signature);
     newSignature.startCommit = this.commit.id;
-    newSignature.module = module;
+    newSignature.node = node;
     const savedSignature = await this.transaction.save(newSignature);
     await this.parameters(savedSignature, signature);
     return savedSignature;
-  }
-
-  async save(signature: any, module?: any): Promise<ModuleSignature | null> {
-    try {
-      if (!signature) {
-        return null;
-      }
-
-      if (Array.isArray(signature)) {
-        for (const sig of signature) {
-          await this.insert(sig, module);
-        }
-        return null;
-      }
-
-      return await this.insert(signature, module);
-    } catch (err) {
-      throw err;
-    }
   }
 }

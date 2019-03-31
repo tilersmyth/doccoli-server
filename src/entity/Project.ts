@@ -11,7 +11,7 @@ import {
 
 import { Team } from "./Team";
 import { Commit } from "./Commit";
-import { ModuleFile } from "./modules/ModuleFile";
+import { FileNodeEntity } from "./nodes/File";
 
 @Entity("projects")
 export class Project extends BaseEntity {
@@ -46,6 +46,6 @@ export class Project extends BaseEntity {
   @OneToMany(() => Commit, commit => commit.project)
   commits: Commit[];
 
-  @OneToMany(() => ModuleFile, file => file.project)
-  files: ModuleFile[];
+  @OneToMany(() => FileNodeEntity, file => file.project)
+  files: FileNodeEntity[];
 }

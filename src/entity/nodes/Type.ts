@@ -9,8 +9,8 @@ import {
   ManyToOne
 } from "typeorm";
 
-@Entity("module_types")
-export class ModuleType extends BaseEntity {
+@Entity("types_node")
+export class TypeNodeEntity extends BaseEntity {
   @PrimaryGeneratedColumn("uuid")
   id: string;
 
@@ -35,9 +35,11 @@ export class ModuleType extends BaseEntity {
   @Column({ nullable: true })
   endCommit: string;
 
-  @ManyToOne(() => ModuleType, type => type.types, { nullable: true })
-  parentType: ModuleType | null;
+  @ManyToOne(() => TypeNodeEntity, type => type.types, { nullable: true })
+  parentType: TypeNodeEntity | null;
 
-  @OneToMany(() => ModuleType, types => types.parentType, { nullable: true })
-  types: ModuleType[];
+  @OneToMany(() => TypeNodeEntity, types => types.parentType, {
+    nullable: true
+  })
+  types: TypeNodeEntity[];
 }

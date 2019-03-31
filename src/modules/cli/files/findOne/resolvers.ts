@@ -1,16 +1,16 @@
 import { ResolverMap } from "../../../../types/graphql-utils";
 
-import { ModuleFile } from "../../../../entity/modules/ModuleFile";
+import { FileNodeEntity } from "../../../../entity/nodes/File";
 
 export const resolvers: ResolverMap = {
   Query: {
     cliFindOneFile: async (_, { filePath }: any, { user, project }: any) => {
       try {
         if (!user) {
-          throw "user not authenticated";
+          throw Error("user not authenticated");
         }
 
-        const file = await ModuleFile.createQueryBuilder("module_files")
+        const file = await FileNodeEntity.createQueryBuilder("module_files")
           .where("module_files.project = :id", { id: project.id })
           .andWhere("module_files.path = :path", { path: filePath })
           .leftJoinAndSelect("module_files.children", "children")

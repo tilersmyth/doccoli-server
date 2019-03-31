@@ -1,6 +1,6 @@
 import { EntityManager } from "typeorm";
 
-import { ModuleParameter } from "../../../../../../entity/modules/ModuleParameter";
+import { ParameterNodeEntity } from "../../../../../../entity/nodes/Parameter";
 import { ModuleTypeNode } from "./TypeNode";
 
 export class ModuleParameterNode {
@@ -16,7 +16,7 @@ export class ModuleParameterNode {
 
   async create() {
     try {
-      const parameter = new ModuleParameter();
+      const parameter = new ParameterNodeEntity();
       parameter.name = this.parameter.name;
       parameter.type = await new ModuleTypeNode(
         this.commit,

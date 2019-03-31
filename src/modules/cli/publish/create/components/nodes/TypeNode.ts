@@ -1,6 +1,6 @@
 import { EntityManager } from "typeorm";
 
-import { ModuleType } from "../../../../../../entity/modules/ModuleType";
+import { TypeNodeEntity } from "../../../../../../entity/nodes/Type";
 
 export class ModuleTypeNode {
   commit: any;
@@ -13,7 +13,15 @@ export class ModuleTypeNode {
     this.transaction = transaction;
   }
 
-  private async saveLoop(type: any, parent: ModuleType | null) {
+  async save() {
+    try {
+      return await this.saveLoop(this.type, null);
+    } catch (err) {
+      throw err;
+    }
+  }
+
+  private async saveLoop(type: any, parent: TypeNodeEntity | null) {
     if (!type) {
       return null;
     }
@@ -35,24 +43,16 @@ export class ModuleTypeNode {
 
   private async saveType(
     type: any,
-    parent: ModuleType | null
-  ): Promise<ModuleType> {
+    parent: TypeNodeEntity | null
+  ): Promise<TypeNodeEntity> {
     try {
-      const newType = new ModuleType();
+      const newType = new TypeNodeEntity();
       newType.startCommit = this.commit.id;
       newType.name = type.name;
       newType.type = type.type;
       newType.refPath = type.refPath;
       newType.parentType = parent;
       return await this.transaction.save(newType);
-    } catch (err) {
-      throw err;
-    }
-  }
-
-  async save() {
-    try {
-      return await this.saveLoop(this.type, null);
     } catch (err) {
       throw err;
     }

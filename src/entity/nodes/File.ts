@@ -9,10 +9,10 @@ import {
 } from "typeorm";
 
 import { Project } from "../Project";
-import { ModuleChildren } from "./ModuleChildren";
+import { ChildrenNodeEntity } from "./Children";
 
-@Entity("module_files")
-export class ModuleFile extends BaseEntity {
+@Entity("files_node")
+export class FileNodeEntity extends BaseEntity {
   @PrimaryGeneratedColumn("uuid")
   id: string;
 
@@ -31,6 +31,6 @@ export class ModuleFile extends BaseEntity {
   @ManyToOne(() => Project, project => project.files)
   project: Project;
 
-  @OneToMany(() => ModuleChildren, module => module.file)
-  children: ModuleChildren[];
+  @OneToMany(() => ChildrenNodeEntity, node => node.file)
+  children: ChildrenNodeEntity[];
 }

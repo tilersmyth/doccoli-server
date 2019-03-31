@@ -1,5 +1,5 @@
 import { ResolverMap } from "../../../../types/graphql-utils";
-import { ModuleFile } from "../../../../entity/modules/ModuleFile";
+import { FileNodeEntity } from "../../../../entity/nodes/File";
 
 export const resolvers: ResolverMap = {
   Mutation: {
@@ -18,7 +18,7 @@ export const resolvers: ResolverMap = {
           console.log("delete files here");
         }
 
-        const files = await ModuleFile.createQueryBuilder("module_files")
+        const files = await FileNodeEntity.createQueryBuilder("module_files")
           .where("module_files.project = :id", { id: project.id })
           .andWhere("module_files.path IN (:...modified)", { modified })
           .select(["module_files.path"])

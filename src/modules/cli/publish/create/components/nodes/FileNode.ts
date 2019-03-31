@@ -1,6 +1,6 @@
 import { EntityManager } from "typeorm";
 
-import { ModuleFile } from "../../../../../../entity/modules/ModuleFile";
+import { FileNodeEntity } from "../../../../../../entity/nodes/File";
 
 export class ModuleFileNode {
   project: any;
@@ -15,7 +15,7 @@ export class ModuleFileNode {
 
   async save() {
     try {
-      const file = new ModuleFile();
+      const file = new FileNodeEntity();
       file.project = this.project;
       file.name = this.file.name;
       file.kind = this.file.kind;

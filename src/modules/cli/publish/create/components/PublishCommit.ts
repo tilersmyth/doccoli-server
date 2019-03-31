@@ -28,7 +28,7 @@ export class PublishCommit {
       });
 
       if (commit && commit.complete) {
-        throw "commit already published";
+        throw Error("commit already published");
       }
 
       return commit;
@@ -54,7 +54,7 @@ export class PublishCommit {
       }
 
       if (commit.size !== size) {
-        throw "file publishing quanitity inconsistency";
+        throw Error("file publishing quanitity inconsistency");
       }
 
       if (size === index) {

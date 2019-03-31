@@ -1,6 +1,6 @@
 import { EntityManager } from "typeorm";
 
-import { ModuleComment } from "../../../../../../entity/modules/ModuleComment";
+import { CommentNodeEntity } from "../../../../../../entity/nodes/Comment";
 
 export class ModuleCommentNode {
   commit: any;
@@ -19,7 +19,7 @@ export class ModuleCommentNode {
     }
 
     try {
-      const comment = new ModuleComment();
+      const comment = new CommentNodeEntity();
       comment.startCommit = this.commit.id;
       comment.shortText = this.comment && this.comment.shortText;
       comment.text = this.comment && this.comment.text;
