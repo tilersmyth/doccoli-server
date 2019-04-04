@@ -4,18 +4,20 @@ import { ResolverMap } from "../../../../types/graphql-utils";
 
 import { ModuleFileNode, ModuleChildrenNode } from "./components/nodes";
 import { PublishCommit } from "./components/PublishCommit";
+import { PublishVersion } from "./components/PublishVersion";
 
 interface PublishArgs {
   file: any;
+  version: string;
   commit: { sha: string; branch: string };
-  progress: { size: number; index: number };
+  progress: { nodesTotal: number; nodesPublished: number };
 }
 
 export const resolvers: ResolverMap = {
   Mutation: {
     cliPublishCreate: async (
       _,
-      { file, commit, progress }: PublishArgs,
+      { file, version, commit, progress }: PublishArgs,
       { project, error }: any
     ) => {
       try {
@@ -33,17 +35,26 @@ export const resolvers: ResolverMap = {
 
           const currentCommit = await moduleCommit.find();
 
-          if (currentCommit && currentCommit.index >= progress.index) {
+          if (
+            currentCommit &&
+            currentCommit.nodesPublished >= progress.nodesPublished
+          ) {
             return { created: true };
+          }
+
+          const commitModule = await moduleCommit.save(currentCommit);
+
+          if (commitModule.complete) {
+            const saveVersion = new PublishVersion(project, transaction);
+            await saveVersion.save(version, commitModule);
           }
 
           const savedFile = await new ModuleFileNode(
             project,
+            commitModule,
             file,
             transaction
           ).save();
-
-          const commitModule = await moduleCommit.save(currentCommit);
 
           for (const children of file.children) {
             await new ModuleChildrenNode(

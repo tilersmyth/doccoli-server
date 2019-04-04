@@ -4,12 +4,12 @@ import {
   BaseEntity,
   PrimaryGeneratedColumn,
   CreateDateColumn,
-  UpdateDateColumn,
-  OneToMany,
   ManyToOne
 } from "typeorm";
+import { Commit } from "../Commit";
+import { TypeNodeConnectorEntity } from "./TypeConnector";
 
-@Entity("types_node")
+@Entity("type_nodes")
 export class TypeNodeEntity extends BaseEntity {
   @PrimaryGeneratedColumn("uuid")
   id: string;
@@ -26,20 +26,14 @@ export class TypeNodeEntity extends BaseEntity {
   @CreateDateColumn()
   createdAt: Date;
 
-  @UpdateDateColumn()
-  updatedAt?: Date;
+  @ManyToOne(() => Commit)
+  startCommit: Commit;
 
-  @Column()
-  startCommit: string;
-
-  @Column({ nullable: true })
-  endCommit: string;
-
-  @ManyToOne(() => TypeNodeEntity, type => type.types, { nullable: true })
-  parentType: TypeNodeEntity | null;
-
-  @OneToMany(() => TypeNodeEntity, types => types.parentType, {
+  @ManyToOne(() => Commit, {
     nullable: true
   })
-  types: TypeNodeEntity[];
+  endCommit: Commit;
+
+  @ManyToOne(() => TypeNodeConnectorEntity, connector => connector.node)
+  connector: TypeNodeConnectorEntity;
 }

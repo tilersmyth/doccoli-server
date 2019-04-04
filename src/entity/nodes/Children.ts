@@ -4,19 +4,13 @@ import {
   BaseEntity,
   PrimaryGeneratedColumn,
   CreateDateColumn,
-  UpdateDateColumn,
-  OneToMany,
-  ManyToOne,
-  OneToOne,
-  JoinColumn
+  ManyToOne
 } from "typeorm";
-import { CommentNodeEntity } from "./Comment";
-import { FileNodeEntity } from "./File";
-import { TypeNodeEntity } from "./Type";
-import { SignatureNodeEntity } from "./Signature";
-import { ParameterNodeEntity } from "./Parameter";
+import { ChildrenNodeConnectorEntity } from "./ChildrenConnector";
 
-@Entity("children_node")
+import { Commit } from "../Commit";
+
+@Entity("children_nodes")
 export class ChildrenNodeEntity extends BaseEntity {
   @PrimaryGeneratedColumn("uuid")
   id: string;
@@ -30,49 +24,14 @@ export class ChildrenNodeEntity extends BaseEntity {
   @CreateDateColumn()
   createdAt: Date;
 
-  @UpdateDateColumn()
-  updatedAt?: Date;
+  @ManyToOne(() => Commit)
+  startCommit: Commit;
 
-  @Column()
-  startCommit: string;
-
-  @Column({ nullable: true })
-  endCommit: string;
-
-  @OneToOne(() => CommentNodeEntity, { nullable: true })
-  @JoinColumn()
-  comment: CommentNodeEntity | null;
-
-  @ManyToOne(() => ChildrenNodeEntity, node => node.children, {
+  @ManyToOne(() => Commit, {
     nullable: true
   })
-  parent: ChildrenNodeEntity;
+  endCommit: Commit;
 
-  @OneToMany(() => ChildrenNodeEntity, node => node.parent, { nullable: true })
-  children: ChildrenNodeEntity[];
-
-  @OneToOne(() => TypeNodeEntity, { nullable: true })
-  @JoinColumn()
-  type: TypeNodeEntity | null;
-
-  @OneToOne(() => SignatureNodeEntity, { nullable: true })
-  @JoinColumn()
-  indexSignature: SignatureNodeEntity | null;
-
-  @OneToOne(() => SignatureNodeEntity, { nullable: true })
-  @JoinColumn()
-  getSignature: SignatureNodeEntity | null;
-
-  @OneToMany(() => SignatureNodeEntity, signature => signature.node, {
-    nullable: true
-  })
-  signatures: SignatureNodeEntity[];
-
-  @OneToMany(() => ParameterNodeEntity, param => param.node, { nullable: true })
-  typeParameter: ParameterNodeEntity[];
-
-  @ManyToOne(() => FileNodeEntity, file => file.children, {
-    nullable: true
-  })
-  file: FileNodeEntity;
+  @ManyToOne(() => ChildrenNodeConnectorEntity, connector => connector.node)
+  connector: ChildrenNodeConnectorEntity;
 }

@@ -1,6 +1,6 @@
 import { ResolverMap } from "../../../../types/graphql-utils";
 
-import { FileNodeEntity } from "../../../../entity/nodes/File";
+import { FileEntity } from "../../../../entity/File";
 
 export const resolvers: ResolverMap = {
   Query: {
@@ -10,7 +10,7 @@ export const resolvers: ResolverMap = {
           throw Error("user not authenticated");
         }
 
-        const file = await FileNodeEntity.createQueryBuilder("module_files")
+        const file = await FileEntity.createQueryBuilder("module_files")
           .where("module_files.project = :id", { id: project.id })
           .andWhere("module_files.path = :path", { path: filePath })
           .leftJoinAndSelect("module_files.children", "children")

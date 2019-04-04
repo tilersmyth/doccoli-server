@@ -50,8 +50,8 @@ input ModuleCommit {
 }
 
 input PublishProgress {
-  size: Int!
-  index: Int!
+  nodesPublished: Int!
+  nodesTotal: Int!
 }
 
 type CliPublishProjectResponse {
@@ -62,6 +62,7 @@ type CliPublishProjectResponse {
 type Mutation {
   cliPublishCreate(
     file: ModuleFileInput!
+    version: String!
     commit: ModuleCommit!
     progress: PublishProgress!
   ): CliPublishProjectResponse!

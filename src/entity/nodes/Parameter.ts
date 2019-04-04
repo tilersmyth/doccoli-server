@@ -4,16 +4,13 @@ import {
   BaseEntity,
   PrimaryGeneratedColumn,
   CreateDateColumn,
-  UpdateDateColumn,
-  OneToOne,
-  JoinColumn,
   ManyToOne
 } from "typeorm";
-import { TypeNodeEntity } from "./Type";
-import { SignatureNodeEntity } from "./Signature";
-import { ChildrenNodeEntity } from "./Children";
 
-@Entity("parameters_node")
+import { Commit } from "../Commit";
+import { ParameterNodeConnectorEntity } from "./ParameterConnector";
+
+@Entity("parameter_nodes")
 export class ParameterNodeEntity extends BaseEntity {
   @PrimaryGeneratedColumn("uuid")
   id: string;
@@ -24,31 +21,14 @@ export class ParameterNodeEntity extends BaseEntity {
   @CreateDateColumn()
   createdAt: Date;
 
-  @UpdateDateColumn()
-  updatedAt?: Date;
+  @ManyToOne(() => Commit)
+  startCommit: Commit;
 
-  @Column()
-  startCommit: string;
-
-  @Column({ nullable: true })
-  endCommit: string;
-
-  @OneToOne(() => TypeNodeEntity, { nullable: true })
-  @JoinColumn()
-  type: TypeNodeEntity | null;
-
-  @ManyToOne(() => SignatureNodeEntity, sig => sig.parameters, {
+  @ManyToOne(() => Commit, {
     nullable: true
   })
-  signature: SignatureNodeEntity;
+  endCommit: Commit;
 
-  @ManyToOne(() => SignatureNodeEntity, sig => sig.typeParameter, {
-    nullable: true
-  })
-  typeSignature: SignatureNodeEntity;
-
-  @ManyToOne(() => ChildrenNodeEntity, node => node.typeParameter, {
-    nullable: true
-  })
-  node: ChildrenNodeEntity;
+  @ManyToOne(() => ParameterNodeConnectorEntity, connector => connector.node)
+  connector: ParameterNodeConnectorEntity;
 }

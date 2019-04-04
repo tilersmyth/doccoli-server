@@ -1,5 +1,6 @@
 import { EntityManager } from "typeorm";
 
+import { ChildrenNodeConnectorEntity } from "../../../../../../entity/nodes/ChildrenConnector";
 import { ChildrenNodeEntity } from "../../../../../../entity/nodes/Children";
 import {
   ModuleCommentNode,
@@ -29,31 +30,38 @@ export class ModuleChildrenNode {
   async save(file: any) {
     try {
       // Save child module
-      const children = new ChildrenNodeEntity();
+      const childrenConnector = new ChildrenNodeConnectorEntity();
       const signature = new ModuleSignatureNode(this.commit, this.transaction);
 
+      const children = new ChildrenNodeEntity();
       children.name = this.children.name;
       children.tagged = this.children.tagged;
+      children.startCommit = this.commit;
+      const savedChildren = await this.transaction.save(children);
 
-      children.comment = await new ModuleCommentNode(
+      childrenConnector.node = [savedChildren];
+
+      childrenConnector.comment = await new ModuleCommentNode(
         this.commit,
         this.children.comment,
         this.transaction
       ).save();
-      children.parent = this.parent;
-      children.type = await new ModuleTypeNode(
+
+      childrenConnector.parent = this.parent;
+      childrenConnector.type = await new ModuleTypeNode(
         this.commit,
         this.children.type,
         this.transaction
       ).save();
-      children.indexSignature = await signature.save(
+      childrenConnector.indexSignature = await signature.save(
         this.children.indexSignature
       );
-      children.getSignature = await signature.save(this.children.getSignature);
-      children.file = file;
-      children.startCommit = this.commit.id;
+      childrenConnector.getSignature = await signature.save(
+        this.children.getSignature
+      );
+      childrenConnector.file = file;
 
-      const savedModule = await this.transaction.save(children);
+      const savedModule = await this.transaction.save(childrenConnector);
 
       // Save child module parameters
       if (this.children.typeParameter) {
@@ -63,7 +71,8 @@ export class ModuleChildrenNode {
             param,
             this.transaction
           ).create();
-          parameter.node = savedModule;
+
+          parameter.children = savedModule;
           await this.transaction.save(parameter);
         }
       }

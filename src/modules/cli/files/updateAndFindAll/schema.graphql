@@ -9,7 +9,8 @@ type updateAndFindAllResponse {
 
 type Mutation {
   updateAndFindAll(
+    commitSha: String!
     modified: [String!]
-    deletes: [String!]
+    deleted: [String!]
   ): updateAndFindAllResponse!
 }

@@ -8,6 +8,7 @@ import {
 } from "typeorm";
 
 import { Project } from "./Project";
+import { VersionEntity } from "./Version";
 
 @Entity("commits")
 export class Commit extends BaseEntity {
@@ -24,14 +25,23 @@ export class Commit extends BaseEntity {
   index: number;
 
   @Column()
-  size: number;
+  nodesPublished: number;
+
+  @Column()
+  nodesTotal: number;
 
   @Column({ default: false })
   complete: boolean;
+
+  @Column({ default: false })
+  active: boolean;
 
   @CreateDateColumn()
   createdAt: Date;
 
   @ManyToOne(() => Project, (project: any) => project.commits)
   project: Project;
+
+  @ManyToOne(() => VersionEntity, (version: any) => version.commits)
+  version: VersionEntity;
 }

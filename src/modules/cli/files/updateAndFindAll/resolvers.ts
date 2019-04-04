@@ -1,11 +1,11 @@
 import { ResolverMap } from "../../../../types/graphql-utils";
-import { FileNodeEntity } from "../../../../entity/nodes/File";
+import { FileEntity } from "../../../../entity/File";
 
 export const resolvers: ResolverMap = {
   Mutation: {
     updateAndFindAll: async (
       _,
-      { modified, deletes }: any,
+      { commitSha, modified, deleted }: any,
       { project, error }: any
     ) => {
       try {
@@ -13,15 +13,20 @@ export const resolvers: ResolverMap = {
           throw error;
         }
 
-        // Delete (cascade) files
-        if (deletes.length > 0) {
-          console.log("delete files here");
+        // If file deleted in published commit, set endCommit
+        if (deleted.length > 0) {
+          await FileEntity.createQueryBuilder("files")
+            .update()
+            .set({ endCommit: commitSha })
+            .where("files.project = :id", { id: project.id })
+            .andWhere("files.path IN (:...deleted)", { deleted });
         }
 
-        const files = await FileNodeEntity.createQueryBuilder("module_files")
-          .where("module_files.project = :id", { id: project.id })
-          .andWhere("module_files.path IN (:...modified)", { modified })
-          .select(["module_files.path"])
+        const files = await FileEntity.createQueryBuilder("files")
+          .where("files.project = :id", { id: project.id })
+          .andWhere("files.path IN (:...modified)", { modified })
+          .andWhere("files.endCommit IS NULL")
+          .select(["files.path"])
           .getMany();
 
         return { files };

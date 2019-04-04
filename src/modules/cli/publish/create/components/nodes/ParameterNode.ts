@@ -1,5 +1,6 @@
 import { EntityManager } from "typeorm";
 
+import { ParameterNodeConnectorEntity } from "../../../../../../entity/nodes/ParameterConnector";
 import { ParameterNodeEntity } from "../../../../../../entity/nodes/Parameter";
 import { ModuleTypeNode } from "./TypeNode";
 
@@ -18,12 +19,19 @@ export class ModuleParameterNode {
     try {
       const parameter = new ParameterNodeEntity();
       parameter.name = this.parameter.name;
-      parameter.type = await new ModuleTypeNode(
+      parameter.startCommit = this.commit;
+
+      const savedParameter = await this.transaction.save(parameter);
+
+      const parameterConnector = new ParameterNodeConnectorEntity();
+      parameterConnector.node = [savedParameter];
+
+      parameterConnector.type = await new ModuleTypeNode(
         this.commit,
-        parameter.type,
+        parameterConnector.type,
         this.transaction
       ).save();
-      return parameter;
+      return parameterConnector;
     } catch (err) {
       throw err;
     }

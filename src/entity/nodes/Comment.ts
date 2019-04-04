@@ -4,10 +4,13 @@ import {
   BaseEntity,
   PrimaryGeneratedColumn,
   CreateDateColumn,
-  UpdateDateColumn
+  ManyToOne
 } from "typeorm";
 
-@Entity("comments_node")
+import { CommentNodeConnectorEntity } from "./CommentConnector";
+import { Commit } from "../Commit";
+
+@Entity("comment_nodes")
 export class CommentNodeEntity extends BaseEntity {
   @PrimaryGeneratedColumn("uuid")
   id: string;
@@ -21,12 +24,14 @@ export class CommentNodeEntity extends BaseEntity {
   @CreateDateColumn()
   createdAt: Date;
 
-  @UpdateDateColumn()
-  updatedAt?: Date;
+  @ManyToOne(() => Commit)
+  startCommit: Commit;
 
-  @Column()
-  startCommit: string;
+  @ManyToOne(() => Commit, {
+    nullable: true
+  })
+  endCommit: Commit;
 
-  @Column({ nullable: true })
-  endCommit: string;
+  @ManyToOne(() => CommentNodeConnectorEntity, connector => connector.node)
+  connector: CommentNodeConnectorEntity;
 }

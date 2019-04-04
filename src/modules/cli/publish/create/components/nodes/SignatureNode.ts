@@ -1,5 +1,6 @@
 import { EntityManager } from "typeorm";
 
+import { SignatureNodeConnectorEntity } from "../../../../../../entity/nodes/SignatureConnector";
 import { SignatureNodeEntity } from "../../../../../../entity/nodes/Signature";
 import { ModuleCommentNode, ModuleTypeNode, ModuleParameterNode } from "./";
 
@@ -15,7 +16,7 @@ export class ModuleSignatureNode {
   async save(
     signature: any,
     module?: any
-  ): Promise<SignatureNodeEntity | null> {
+  ): Promise<SignatureNodeConnectorEntity | null> {
     try {
       if (!signature) {
         return null;
@@ -34,22 +35,30 @@ export class ModuleSignatureNode {
     }
   }
 
-  private async create(signature: any) {
-    const newSignature = new SignatureNodeEntity();
-    newSignature.name = signature.name;
-    newSignature.kind = signature.kind;
-    newSignature.comment = await new ModuleCommentNode(
+  private async create(value: any) {
+    const signature = new SignatureNodeEntity();
+
+    signature.name = value.name;
+    signature.kind = value.kind;
+    signature.startCommit = this.commit;
+
+    const savedSignature = await this.transaction.save(signature);
+
+    const signatureConnector = new SignatureNodeConnectorEntity();
+    signatureConnector.node = [savedSignature];
+
+    signatureConnector.comment = await new ModuleCommentNode(
       this.commit,
-      signature.comment,
+      value.comment,
       this.transaction
     ).save();
-    newSignature.type = await new ModuleTypeNode(
+    signatureConnector.type = await new ModuleTypeNode(
       this.commit,
-      signature.type,
+      value.type,
       this.transaction
     ).save();
 
-    return newSignature;
+    return signatureConnector;
   }
 
   private async parameters(node: any, signature: any) {
@@ -61,7 +70,6 @@ export class ModuleSignatureNode {
           this.transaction
         ).create();
 
-        parameter.startCommit = this.commit.id;
         parameter.signature = node;
 
         await this.transaction.save(parameter);
@@ -75,7 +83,7 @@ export class ModuleSignatureNode {
           param,
           this.transaction
         ).create();
-        parameter.startCommit = this.commit.id;
+
         parameter.typeSignature = node;
         await this.transaction.save(parameter);
       }
@@ -85,11 +93,11 @@ export class ModuleSignatureNode {
   private async insert(
     signature: any,
     node: any
-  ): Promise<SignatureNodeEntity> {
-    const newSignature = await this.create(signature);
-    newSignature.startCommit = this.commit.id;
-    newSignature.node = node;
-    const savedSignature = await this.transaction.save(newSignature);
+  ): Promise<SignatureNodeConnectorEntity> {
+    const signatureConnector = await this.create(signature);
+
+    signatureConnector.children = node;
+    const savedSignature = await this.transaction.save(signatureConnector);
     await this.parameters(savedSignature, signature);
     return savedSignature;
   }

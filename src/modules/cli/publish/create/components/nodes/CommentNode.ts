@@ -1,5 +1,6 @@
 import { EntityManager } from "typeorm";
 
+import { CommentNodeConnectorEntity } from "../../../../../../entity/nodes/CommentConnector";
 import { CommentNodeEntity } from "../../../../../../entity/nodes/Comment";
 
 export class ModuleCommentNode {
@@ -20,10 +21,16 @@ export class ModuleCommentNode {
 
     try {
       const comment = new CommentNodeEntity();
-      comment.startCommit = this.commit.id;
+      comment.startCommit = this.commit;
       comment.shortText = this.comment && this.comment.shortText;
       comment.text = this.comment && this.comment.text;
-      return await this.transaction.save(comment);
+
+      const savedComment = await this.transaction.save(comment);
+
+      const commentConnector = new CommentNodeConnectorEntity();
+      commentConnector.node = [savedComment];
+
+      return await this.transaction.save(commentConnector);
     } catch (err) {
       throw err;
     }

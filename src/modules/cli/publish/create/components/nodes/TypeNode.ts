@@ -1,5 +1,6 @@
 import { EntityManager } from "typeorm";
 
+import { TypeNodeConnectorEntity } from "../../../../../../entity/nodes/TypeConnector";
 import { TypeNodeEntity } from "../../../../../../entity/nodes/Type";
 
 export class ModuleTypeNode {
@@ -21,7 +22,7 @@ export class ModuleTypeNode {
     }
   }
 
-  private async saveLoop(type: any, parent: TypeNodeEntity | null) {
+  private async saveLoop(type: any, parent: TypeNodeConnectorEntity | null) {
     if (!type) {
       return null;
     }
@@ -42,17 +43,23 @@ export class ModuleTypeNode {
   }
 
   private async saveType(
-    type: any,
-    parent: TypeNodeEntity | null
-  ): Promise<TypeNodeEntity> {
+    value: any,
+    parent: TypeNodeConnectorEntity | null
+  ): Promise<TypeNodeConnectorEntity> {
     try {
-      const newType = new TypeNodeEntity();
-      newType.startCommit = this.commit.id;
-      newType.name = type.name;
-      newType.type = type.type;
-      newType.refPath = type.refPath;
-      newType.parentType = parent;
-      return await this.transaction.save(newType);
+      const type = new TypeNodeEntity();
+      type.startCommit = this.commit;
+      type.name = value.name;
+      type.type = value.type;
+      type.refPath = value.refPath;
+
+      const savedType = await this.transaction.save(type);
+
+      const typeConnector = new TypeNodeConnectorEntity();
+      typeConnector.node = [savedType];
+      typeConnector.parentType = parent;
+
+      return await this.transaction.save(typeConnector);
     } catch (err) {
       throw err;
     }
