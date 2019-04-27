@@ -7,7 +7,7 @@ import {
   ManyToOne
 } from "typeorm";
 import { Commit } from "../Commit";
-import { SignatureNodeConnectorEntity } from "./SignatureConnector";
+import { SignatureNodeConnector } from "../connectors/Signature";
 
 @Entity("signature_nodes")
 export class SignatureNodeEntity extends BaseEntity {
@@ -29,8 +29,8 @@ export class SignatureNodeEntity extends BaseEntity {
   @ManyToOne(() => Commit, {
     nullable: true
   })
-  endCommit: Commit;
+  endCommit: Commit | null;
 
-  @ManyToOne(() => SignatureNodeConnectorEntity, connector => connector.node)
-  connector: SignatureNodeConnectorEntity;
+  @ManyToOne(() => SignatureNodeConnector, connector => connector.node)
+  connector: SignatureNodeConnector;
 }

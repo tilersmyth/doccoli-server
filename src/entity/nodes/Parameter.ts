@@ -8,7 +8,7 @@ import {
 } from "typeorm";
 
 import { Commit } from "../Commit";
-import { ParameterNodeConnectorEntity } from "./ParameterConnector";
+import { ParameterNodeConnector } from "../connectors/Parameter";
 
 @Entity("parameter_nodes")
 export class ParameterNodeEntity extends BaseEntity {
@@ -17,6 +17,9 @@ export class ParameterNodeEntity extends BaseEntity {
 
   @Column("text")
   name: string;
+
+  @Column("text")
+  kind: string;
 
   @CreateDateColumn()
   createdAt: Date;
@@ -27,8 +30,8 @@ export class ParameterNodeEntity extends BaseEntity {
   @ManyToOne(() => Commit, {
     nullable: true
   })
-  endCommit: Commit;
+  endCommit: Commit | null;
 
-  @ManyToOne(() => ParameterNodeConnectorEntity, connector => connector.node)
-  connector: ParameterNodeConnectorEntity;
+  @ManyToOne(() => ParameterNodeConnector, connector => connector.node)
+  connector: ParameterNodeConnector;
 }

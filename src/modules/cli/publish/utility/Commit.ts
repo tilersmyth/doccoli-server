@@ -1,5 +1,5 @@
 import { EntityManager } from "typeorm";
-import { Commit } from "../../../../../entity/Commit";
+import { Commit } from "../../../../entity";
 
 export class PublishCommit {
   project: any;
@@ -40,7 +40,7 @@ export class PublishCommit {
   async save(commit: any) {
     try {
       const { sha, branch } = this.commit;
-      const { nodesTotal, nodesPublished } = this.progress;
+      const { nodesPublished, nodesTotal } = this.progress;
 
       if (!commit) {
         // Get count of commits within current branch

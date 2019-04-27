@@ -7,14 +7,13 @@ import {
   ManyToOne
 } from "typeorm";
 import { Commit } from "../Commit";
-import { TypeNodeConnectorEntity } from "./TypeConnector";
 
 @Entity("type_nodes")
 export class TypeNodeEntity extends BaseEntity {
   @PrimaryGeneratedColumn("uuid")
   id: string;
 
-  @Column("text", { nullable: true }) // nullable when used in types
+  @Column("text", { nullable: true })
   name: string;
 
   @Column("text")
@@ -33,7 +32,4 @@ export class TypeNodeEntity extends BaseEntity {
     nullable: true
   })
   endCommit: Commit;
-
-  @ManyToOne(() => TypeNodeConnectorEntity, connector => connector.node)
-  connector: TypeNodeConnectorEntity;
 }

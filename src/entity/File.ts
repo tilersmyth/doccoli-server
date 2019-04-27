@@ -9,7 +9,7 @@ import {
 } from "typeorm";
 
 import { Project } from "./Project";
-import { ChildrenNodeConnectorEntity } from "./nodes/ChildrenConnector";
+import { ChildrenNodeConnector } from "./connectors/Children";
 import { Commit } from "./Commit";
 
 @Entity("files")
@@ -40,6 +40,6 @@ export class FileEntity extends BaseEntity {
   @ManyToOne(() => Project, project => project.files)
   project: Project;
 
-  @OneToMany(() => ChildrenNodeConnectorEntity, node => node.file)
-  children: ChildrenNodeConnectorEntity[];
+  @OneToMany(() => ChildrenNodeConnector, children => children.file)
+  children: ChildrenNodeConnector[];
 }

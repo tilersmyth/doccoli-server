@@ -6,9 +6,9 @@ import {
   CreateDateColumn,
   ManyToOne
 } from "typeorm";
-import { ChildrenNodeConnectorEntity } from "./ChildrenConnector";
 
 import { Commit } from "../Commit";
+import { ChildrenNodeConnector } from "../connectors/Children";
 
 @Entity("children_nodes")
 export class ChildrenNodeEntity extends BaseEntity {
@@ -21,6 +21,9 @@ export class ChildrenNodeEntity extends BaseEntity {
   @Column({ default: false })
   tagged: boolean;
 
+  @Column("text")
+  kind: string;
+
   @CreateDateColumn()
   createdAt: Date;
 
@@ -32,6 +35,6 @@ export class ChildrenNodeEntity extends BaseEntity {
   })
   endCommit: Commit;
 
-  @ManyToOne(() => ChildrenNodeConnectorEntity, connector => connector.node)
-  connector: ChildrenNodeConnectorEntity;
+  @ManyToOne(() => ChildrenNodeConnector, connector => connector.node)
+  connector: ChildrenNodeConnector;
 }

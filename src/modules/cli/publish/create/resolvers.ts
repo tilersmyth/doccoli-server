@@ -2,9 +2,9 @@ import { getConnection } from "typeorm";
 
 import { ResolverMap } from "../../../../types/graphql-utils";
 
-import { ModuleFileNode, ModuleChildrenNode } from "./components/nodes";
-import { PublishCommit } from "./components/PublishCommit";
-import { PublishVersion } from "./components/PublishVersion";
+import { PublishCommit } from "../utility/Commit";
+import { PublishVersion } from "../utility/Version";
+import { EntityBulk } from "./EntityBulk";
 
 interface PublishArgs {
   file: any;
@@ -49,20 +49,10 @@ export const resolvers: ResolverMap = {
             await saveVersion.save(version, commitModule);
           }
 
-          const savedFile = await new ModuleFileNode(
-            project,
-            commitModule,
-            file,
-            transaction
-          ).save();
+          const entityBulk = new EntityBulk(commitModule, transaction);
 
-          for (const children of file.children) {
-            await new ModuleChildrenNode(
-              commitModule,
-              children,
-              null,
-              transaction
-            ).save(savedFile);
+          if (file.path === "src/repository/Repository.ts") {
+            await entityBulk.insert(project, "file", file);
           }
 
           return { created: true };

@@ -1,7 +1,0 @@
-type Mutation {
-  cliPublishUpdateComment(
-    comment: ModuleChildCommentInput!
-    commit: ModuleCommit!
-    progress: PublishProgress!
-  ): Boolean!
-}

@@ -1,5 +1,5 @@
 import { EntityManager } from "typeorm";
-import { VersionEntity } from "../../../../../entity/Version";
+import { VersionEntity } from "../../../../entity/Version";
 
 export class PublishVersion {
   project: any;

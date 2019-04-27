@@ -1,0 +1,36 @@
+input NodeUpdateQueryArgs {
+  key: String
+  value: String
+}
+
+input NodeUpdateQuery {
+  entity: String!
+  args: [NodeUpdateQueryArgs!]
+}
+
+input NodeUpdateEntity {
+  type: ModuleChildTypeInput
+  types: ModuleChildTypeInput
+  comment: ModuleChildCommentInput
+  typeArguments: ModuleChildTypeInput
+}
+
+input NodeUpdate {
+  kind: String!
+  query: [NodeUpdateQuery!]
+  newNode: [NodeUpdateQueryArgs!]
+}
+
+input FileUpdate {
+  path: String!
+  updates: [NodeUpdate!]
+}
+
+type Mutation {
+  cliPublishUpdate(
+    commit: ModuleCommit!
+    version: String!
+    file: FileUpdate!
+    progress: PublishProgress!
+  ): Boolean!
+}

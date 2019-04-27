@@ -7,8 +7,8 @@ import {
   ManyToOne
 } from "typeorm";
 
-import { CommentNodeConnectorEntity } from "./CommentConnector";
 import { Commit } from "../Commit";
+import { CommentNodeConnector } from "../connectors/Comment";
 
 @Entity("comment_nodes")
 export class CommentNodeEntity extends BaseEntity {
@@ -30,8 +30,8 @@ export class CommentNodeEntity extends BaseEntity {
   @ManyToOne(() => Commit, {
     nullable: true
   })
-  endCommit: Commit;
+  endCommit: Commit | null;
 
-  @ManyToOne(() => CommentNodeConnectorEntity, connector => connector.node)
-  connector: CommentNodeConnectorEntity;
+  @ManyToOne(() => CommentNodeConnector, connector => connector.node)
+  connector: CommentNodeConnector;
 }

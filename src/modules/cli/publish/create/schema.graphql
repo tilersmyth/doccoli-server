@@ -1,5 +1,6 @@
 input ModuleChildParametersInput {
   name: String!
+  kind: String
   type: ModuleChildTypeInput
 }
 
@@ -28,6 +29,7 @@ input ModuleChildCommentInput {
 input ModuleChildrenInput {
   name: String!
   tagged: Boolean
+  kind: String
   comment: ModuleChildCommentInput
   children: [ModuleChildrenInput!]
   type: ModuleChildTypeInput
