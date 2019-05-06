@@ -15,42 +15,28 @@ export class EntityBulk {
     await this.insert(parent, entity, node);
   };
 
-  private tempAllowed: string[] = [
-    "file",
-    "children",
-    "signatures",
-    "getSignature",
-    "comment",
-    "parameters",
-    "typeParameter",
-    "type",
-    "types",
-    "typeArguments"
-  ];
-
   async insert(parent: any, name: string, node: any) {
     try {
       if (!router[name]) {
         throw Error(`"${name}" entity not found`);
       }
 
-      if (this.tempAllowed.indexOf(name) > -1) {
-        const entity = new router[name](this.commit, this.transaction);
+      const entity = new router[name](this.commit, this.transaction);
 
-        const connector = await entity.create(parent);
-        await entity.save(connector, node);
+      const connector = await entity.create(parent);
 
-        for (const prop of Object.keys(node)) {
-          if (Array.isArray(node[prop])) {
-            await Promise.all(
-              node[prop].map(this.map.bind(null, connector, prop))
-            );
-            continue;
-          }
+      await entity.save(connector, node);
 
-          if (typeof node[prop] === "object") {
-            await this.insert(connector, prop, node[prop]);
-          }
+      for (const prop of Object.keys(node)) {
+        if (Array.isArray(node[prop])) {
+          await Promise.all(
+            node[prop].map(this.map.bind(null, connector, prop))
+          );
+          continue;
+        }
+
+        if (typeof node[prop] === "object") {
+          await this.insert(connector, prop, node[prop]);
         }
       }
 

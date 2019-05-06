@@ -1,0 +1,8 @@
+type FindAllFiles {
+  files: [String!]
+  error: Error
+}
+
+type Query {
+  findAllFiles: FindAllFiles
+}

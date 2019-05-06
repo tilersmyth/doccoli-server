@@ -5,7 +5,8 @@ export const cliUserAuth = {
     cliMe: cliUserAuthMiddleware,
     cliUserProjects: cliUserAuthMiddleware,
     cliLastCommit: cliUserAuthMiddleware,
-    cliFindOneFile: cliUserAuthMiddleware
+    cliFindOneFile: cliUserAuthMiddleware,
+    findAllFiles: cliUserAuthMiddleware
   },
   Mutation: {
     cliCreateProject: cliUserAuthMiddleware,

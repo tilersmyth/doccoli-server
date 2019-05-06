@@ -19,6 +19,7 @@ export const router: EntityRouter = {
   comment: CommentConnector,
   signatures: SignatureConnector,
   getSignature: SignatureConnector,
+  indexSignature: SignatureConnector,
   parameters: ParameterConnector,
   typeParameter: ParameterConnector,
   type: TypeConnector,

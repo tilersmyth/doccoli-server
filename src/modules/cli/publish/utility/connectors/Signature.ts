@@ -3,6 +3,10 @@ import { EntityManager } from "typeorm";
 import { SignatureNodeConnector } from "../../../../../entity";
 import { SignatureNode } from "../nodes/Signature";
 
+interface ConnectorRelation {
+  [index: string]: any;
+}
+
 export class SignatureConnector extends SignatureNode {
   commit: any;
   transaction: EntityManager;
@@ -12,11 +16,37 @@ export class SignatureConnector extends SignatureNode {
     this.transaction = transaction;
   }
 
+  private static relations: any = [
+    {
+      key: "children",
+      instance: "ChildrenNodeConnector",
+      array: false
+    },
+    {
+      key: "comment",
+      instance: "CommentNodeConnector",
+      array: false
+    }
+  ];
+
   async create(parent: any) {
-    const newConnector = new SignatureNodeConnector();
+    const connector: ConnectorRelation = new SignatureNodeConnector();
 
-    newConnector.children = parent;
+    const { name } = parent.constructor;
 
-    return this.transaction.save(newConnector);
+    const relations = SignatureConnector.relations.find(
+      (relation: any) => relation.instance === name
+    );
+
+    if (!relations) {
+      throw Error(`relation ${name} not joined on SignatureNodeConnector`);
+    }
+
+    if (relations) {
+      console.log(relations.key);
+      connector[relations.key] = relations.array ? [parent] : parent;
+    }
+
+    return this.transaction.save(connector);
   }
 }

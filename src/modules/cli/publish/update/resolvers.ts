@@ -63,6 +63,12 @@ export const resolvers: ResolverMap = {
 
             const nestedResults = await queryBuilder.getOne();
 
+            if (!nestedResults) {
+              throw Error(
+                "Unable to locate target for update node with provided query"
+              );
+            }
+
             const nodeConnector = nodeQuery.results(
               update.query,
               nestedResults

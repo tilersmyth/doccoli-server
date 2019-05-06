@@ -1,0 +1,8 @@
+type deleteFilesResponse {
+  success: Boolean
+  error: Error
+}
+
+type Mutation {
+  deleteFiles(commitSha: String!, files: [String!]): deleteFilesResponse!
+}

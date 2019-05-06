@@ -3,6 +3,10 @@ import { EntityManager } from "typeorm";
 import { CommentNodeConnector } from "../../../../../entity/connectors/Comment";
 import { CommentNode } from "../nodes/Comment";
 
+interface ConnectorRelation {
+  [index: string]: any;
+}
+
 export class CommentConnector extends CommentNode {
   commit: any;
   transaction: EntityManager;
@@ -13,19 +17,36 @@ export class CommentConnector extends CommentNode {
     this.transaction = transaction;
   }
 
+  private static relations: any = [
+    {
+      key: "children",
+      instance: "ChildrenNodeConnector",
+      array: false
+    },
+    {
+      key: "signatures",
+      instance: "SignatureNodeConnector",
+      array: false
+    }
+  ];
+
   create = (parent: any) => {
-    const newConnector = new CommentNodeConnector();
+    const connector: ConnectorRelation = new CommentNodeConnector();
 
     const { name } = parent.constructor;
 
-    if (name === "ChildrenNodeConnector") {
-      newConnector.children = parent;
+    const relations = CommentConnector.relations.find(
+      (relation: any) => relation.instance === name
+    );
+
+    if (!relations) {
+      throw Error(`relation ${name} not joined on CommentNodeConnector`);
     }
 
-    if (name === "SignatureNodeConnector") {
-      newConnector.signatures = parent;
+    if (relations) {
+      connector[relations.key] = relations.array ? [parent] : parent;
     }
 
-    return this.transaction.save(newConnector);
+    return this.transaction.save(connector);
   };
 }

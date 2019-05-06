@@ -16,7 +16,7 @@ input ModuleChildSignatureInput {
 input ModuleChildTypeInput {
   type: String!
   name: String
-  refPath: String
+  file: String
   types: [ModuleChildTypeInput!]
   typeArguments: [ModuleChildTypeInput!]
 }
