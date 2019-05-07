@@ -43,7 +43,6 @@ export class SignatureConnector extends SignatureNode {
     }
 
     if (relations) {
-      console.log(relations.key);
       connector[relations.key] = relations.array ? [parent] : parent;
     }
 

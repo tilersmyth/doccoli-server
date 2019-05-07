@@ -39,6 +39,9 @@ export class Commit extends BaseEntity {
   @CreateDateColumn()
   createdAt: Date;
 
+  @Column()
+  projectId: string;
+
   @ManyToOne(() => Project, (project: any) => project.commits)
   project: Project;
 

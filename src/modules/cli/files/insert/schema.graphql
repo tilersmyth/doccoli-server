@@ -1,0 +1,11 @@
+type insertFilesResponse {
+  success: Boolean
+  error: Error
+}
+
+type Mutation {
+  insertFiles(
+    commit: ModuleCommit!
+    files: [ModuleFileInput!]
+  ): insertFilesResponse!
+}

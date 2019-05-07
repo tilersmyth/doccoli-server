@@ -9,6 +9,7 @@ export const projectAuth = {
   Mutation: {
     updateAndFindAll: projectAuthMiddleware,
     cliPublishCreate: projectAuthMiddleware,
-    cliPublishUpdate: projectAuthMiddleware
+    cliPublishUpdate: projectAuthMiddleware,
+    insertFiles: projectAuthMiddleware
   }
 };

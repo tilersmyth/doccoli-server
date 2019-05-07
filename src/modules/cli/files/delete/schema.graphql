@@ -4,5 +4,5 @@ type deleteFilesResponse {
 }
 
 type Mutation {
-  deleteFiles(commitSha: String!, files: [String!]): deleteFilesResponse!
+  deleteFiles(commit: ModuleCommit!, files: [String!]): deleteFilesResponse!
 }

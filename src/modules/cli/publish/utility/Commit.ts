@@ -37,7 +37,7 @@ export class PublishCommit {
     }
   }
 
-  async save(commit: any) {
+  async save(commit?: any) {
     try {
       const { sha, branch } = this.commit;
       const { nodesPublished, nodesTotal } = this.progress;

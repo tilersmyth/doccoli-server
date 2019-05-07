@@ -12,6 +12,7 @@ export const cliUserAuth = {
     cliCreateProject: cliUserAuthMiddleware,
     updateAndFindAll: cliUserAuthMiddleware,
     cliPublishCreate: cliUserAuthMiddleware,
-    cliPublishUpdate: cliUserAuthMiddleware
+    cliPublishUpdate: cliUserAuthMiddleware,
+    insertFiles: cliUserAuthMiddleware
   }
 };

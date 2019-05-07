@@ -1,5 +1,5 @@
 import { EntityManager } from "typeorm";
-import { TypeNodeEntity } from "../../../../../entity";
+import { TypeNodeEntity, FileEntity } from "../../../../../entity";
 
 export class TypeNode {
   commit: any;
@@ -11,17 +11,39 @@ export class TypeNode {
   }
 
   async save(connector: any, fields: any) {
-    const type = new TypeNodeEntity();
-    Object.assign(type, fields);
-    type.startCommit = this.commit;
+    try {
+      const type = new TypeNodeEntity();
+      Object.assign(type, fields);
 
-    // For TypeNode we have to append the node to the
-    // connector.node due to the one sided many-to-many
-    // relationship
-    const node = await this.transaction.save(type);
-    connector.node = [node];
-    await this.transaction.save(connector);
+      // Add file relation if type references interface
+      if (fields.file) {
+        const file = await this.transaction.findOne(FileEntity, {
+          where: {
+            project: this.commit.project,
+            path: fields.file,
+            endCommit: null
+          }
+        });
 
-    return node;
+        if (!file) {
+          throw Error(`Type file reference (${fields.file}) not found`);
+        }
+
+        type.file = file;
+      }
+
+      type.startCommit = this.commit;
+
+      // For TypeNode we have to append the node to the
+      // connector.node due to the one sided many-to-many
+      // relationship
+      const node = await this.transaction.save(type);
+      connector.node = [node];
+      await this.transaction.save(connector);
+
+      return node;
+    } catch (err) {
+      throw err;
+    }
   }
 }

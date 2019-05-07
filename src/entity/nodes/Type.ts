@@ -7,6 +7,7 @@ import {
   ManyToOne
 } from "typeorm";
 import { Commit } from "../Commit";
+import { FileEntity } from "../File";
 
 @Entity("type_nodes")
 export class TypeNodeEntity extends BaseEntity {
@@ -19,11 +20,11 @@ export class TypeNodeEntity extends BaseEntity {
   @Column("text")
   type: string;
 
-  @Column("text", { nullable: true })
-  refPath: string;
-
   @CreateDateColumn()
   createdAt: Date;
+
+  @ManyToOne(() => FileEntity, { nullable: true })
+  file: FileEntity;
 
   @ManyToOne(() => Commit)
   startCommit: Commit;
