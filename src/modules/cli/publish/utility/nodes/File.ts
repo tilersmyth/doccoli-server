@@ -11,14 +11,9 @@ export class ModuleFileNode {
     this.transaction = transaction;
   }
 
-  find(project: any, path: string) {
+  find(project: any, args: any) {
     return this.transaction.findOne(FileEntity, {
-      where: { project, path, endCommit: null }
+      where: { project, endCommit: null, ...args }
     });
-  }
-
-  save(entity: any, fields: any) {
-    Object.assign(entity, fields);
-    return this.transaction.save(entity);
   }
 }

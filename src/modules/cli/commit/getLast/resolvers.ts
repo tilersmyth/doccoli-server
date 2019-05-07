@@ -14,7 +14,7 @@ export const resolvers: ResolverMap = {
         }
 
         const commit = await Commit.findOne({
-          where: { project: project.id, branch, complete: true },
+          where: { project, branch, complete: true },
           order: {
             createdAt: "DESC"
           }

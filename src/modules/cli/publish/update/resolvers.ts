@@ -7,6 +7,7 @@ import { ModuleFileNode } from "../utility/nodes/File";
 
 import { NodeQuery } from "./Query";
 import { NodeUpdatePublish } from "./Publish";
+// import { ChildrenNodeConnector } from "../../../../entity";
 
 interface PublishArgs {
   commit: { sha: string; branch: string };
@@ -48,7 +49,7 @@ export const resolvers: ResolverMap = {
           const commitModule = await moduleCommit.save(currentCommit);
 
           const fileNode = new ModuleFileNode(commitModule, transaction);
-          const fileModule = await fileNode.find(project, file.path);
+          const fileModule = await fileNode.find(project, file);
 
           if (!fileModule) {
             throw Error(`file not found: ${file.path}`);

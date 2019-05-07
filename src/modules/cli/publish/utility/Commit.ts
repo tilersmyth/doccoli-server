@@ -23,8 +23,8 @@ export class PublishCommit {
     try {
       const { sha, branch } = this.commit;
 
-      const commit = await Commit.findOne({
-        where: { project: this.project.id, sha, branch }
+      const commit = await this.transaction.findOne(Commit, {
+        where: { project: this.project, sha, branch }
       });
 
       if (commit && commit.complete) {

@@ -12,10 +12,10 @@ export class EntityBulk {
   }
 
   private map = async (parent: any, entity: string, node: any) => {
-    await this.insert(parent, entity, node);
+    await this.insertNodes(parent, entity, node);
   };
 
-  async insert(parent: any, name: string, node: any) {
+  private insertNodes = async (parent: any, name: string, node: any) => {
     try {
       if (!router[name]) {
         throw Error(`"${name}" entity not found`);
@@ -36,7 +36,7 @@ export class EntityBulk {
         }
 
         if (typeof node[prop] === "object") {
-          await this.insert(connector, prop, node[prop]);
+          await this.insertNodes(connector, prop, node[prop]);
         }
       }
 
@@ -44,5 +44,14 @@ export class EntityBulk {
     } catch (err) {
       throw err;
     }
+  };
+
+  async insert(project: any, fileNode: any) {
+    const fileModule = new router.file(this.commit, this.transaction);
+    const file = await fileModule.find(project, fileNode);
+
+    await Promise.all(
+      fileNode.children.map(this.map.bind(null, file, "children"))
+    );
   }
 }

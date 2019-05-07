@@ -19,7 +19,7 @@ export class TypeNode {
       if (fields.file) {
         const file = await this.transaction.findOne(FileEntity, {
           where: {
-            project: this.commit.project,
+            project: this.commit.projectId,
             path: fields.file,
             endCommit: null
           }

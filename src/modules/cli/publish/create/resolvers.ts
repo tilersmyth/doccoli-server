@@ -51,7 +51,7 @@ export const resolvers: ResolverMap = {
 
           const entityBulk = new EntityBulk(commitModule, transaction);
 
-          await entityBulk.insert(project, "file", file);
+          await entityBulk.insert(project, file);
 
           return { created: true };
         });
