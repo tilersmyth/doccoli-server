@@ -26,11 +26,16 @@ input FileUpdate {
   updates: [NodeUpdate!]
 }
 
+type PublishUpdateResponse {
+  success: Boolean
+  error: Error
+}
+
 type Mutation {
   cliPublishUpdate(
     commit: ModuleCommit!
     version: String!
     file: FileUpdate!
     progress: PublishProgress!
-  ): Boolean!
+  ): PublishUpdateResponse!
 }

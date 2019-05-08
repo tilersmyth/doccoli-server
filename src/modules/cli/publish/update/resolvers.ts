@@ -7,7 +7,6 @@ import { ModuleFileNode } from "../utility/nodes/File";
 
 import { NodeQuery } from "./Query";
 import { NodeUpdatePublish } from "./Publish";
-// import { ChildrenNodeConnector } from "../../../../entity";
 
 interface PublishArgs {
   commit: { sha: string; branch: string };
@@ -23,12 +22,16 @@ export const resolvers: ResolverMap = {
       { commit, file, progress }: PublishArgs,
       { project, error }: any
     ) => {
-      try {
-        if (error) {
-          throw error;
-        }
+      if (error) {
+        const err = {
+          path: "server",
+          message: error.message
+        };
+        return { error: err };
+      }
 
-        return getConnection().transaction(async transaction => {
+      return getConnection().transaction(async transaction => {
+        try {
           const moduleCommit = new PublishCommit(
             project,
             commit,
@@ -82,11 +85,15 @@ export const resolvers: ResolverMap = {
             }
           }
 
-          return true;
-        });
-      } catch (error) {
-        return { error };
-      }
+          return { success: true };
+        } catch (error) {
+          const err = {
+            path: "server",
+            message: error.message
+          };
+          return { error: err };
+        }
+      });
     }
   }
 };
