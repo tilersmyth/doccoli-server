@@ -12,21 +12,21 @@ export class ParameterConnector extends ParameterNode {
     this.transaction = transaction;
   }
 
-  async create(parent: any) {
+  async create(entity: any, _: any) {
     const newConnector = new ParameterNodeConnector();
 
-    const { name } = parent.constructor;
+    const { name } = entity.constructor;
 
     if (name === "TypeNodeConnector") {
-      newConnector.type = parent;
+      newConnector.type = entity;
     }
 
     if (name === "ChildrenNodeConnector") {
-      newConnector.children = parent;
+      newConnector.children = entity;
     }
 
     if (name === "SignatureNodeConnector") {
-      newConnector.signatures = parent;
+      newConnector.signatures = entity;
     }
 
     return this.transaction.save(newConnector);

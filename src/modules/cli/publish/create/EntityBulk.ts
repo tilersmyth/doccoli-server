@@ -23,7 +23,7 @@ export class EntityBulk {
 
       const entity = new router[name](this.commit, this.transaction);
 
-      const connector = await entity.create(parent);
+      const connector = await entity.create(parent, name);
 
       await entity.save(connector, node);
 

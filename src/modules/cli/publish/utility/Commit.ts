@@ -45,7 +45,7 @@ export class PublishCommit {
       if (!commit) {
         // Get count of commits within current branch
         const countByBranch = await Commit.count({
-          where: { project: this.project.id, branch }
+          where: { project: this.project, branch }
         });
 
         const newCommit = new Commit();

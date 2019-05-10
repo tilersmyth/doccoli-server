@@ -64,7 +64,6 @@ export const resolvers: ResolverMap = {
 
           for (const update of file.updates) {
             const queryBuilder = nodeQuery.build(update.query);
-
             const nestedResults = await queryBuilder.getOne();
 
             if (!nestedResults) {

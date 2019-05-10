@@ -3,26 +3,22 @@ import {
   BaseEntity,
   PrimaryGeneratedColumn,
   OneToMany,
-  ManyToMany,
-  JoinTable
+  ManyToOne
 } from "typeorm";
 
-import { TypeNodeEntity } from "../nodes/Type";
 import { ChildrenNodeConnector } from "./Children";
 import { ParameterNodeConnector } from "./Parameter";
 import { SignatureNodeConnector } from "./Signature";
-import { TypesNodeConnector } from "./Types";
-import { TypeArgumentsNodeConnector } from "./TypeArgument";
+import { TypeNodeEntity } from "../nodes/Type";
 
 @Entity("type_node_connectors")
 export class TypeNodeConnector extends BaseEntity {
   @PrimaryGeneratedColumn("uuid")
   id: string;
 
-  @ManyToMany(() => TypeNodeEntity, {
+  @OneToMany(() => TypeNodeEntity, node => node.connector, {
     nullable: true
   })
-  @JoinTable()
   node: TypeNodeEntity[];
 
   @OneToMany(() => ChildrenNodeConnector, children => children.type, {
@@ -40,17 +36,23 @@ export class TypeNodeConnector extends BaseEntity {
   })
   signatures: SignatureNodeConnector[];
 
-  @OneToMany(() => TypesNodeConnector, types => types.type, {
+  @OneToMany(() => TypeNodeConnector, inner => inner.parentTypeArguments, {
     nullable: true
   })
-  types: TypesNodeConnector[];
+  typeArguments: TypeNodeConnector[];
 
-  @OneToMany(
-    () => TypeArgumentsNodeConnector,
-    typeArguments => typeArguments.type,
-    {
-      nullable: true
-    }
-  )
-  typeArguments: TypeArgumentsNodeConnector[];
+  @ManyToOne(() => TypeNodeConnector, parent => parent.typeArguments, {
+    nullable: true
+  })
+  parentTypeArguments: TypeNodeConnector | null;
+
+  @OneToMany(() => TypeNodeConnector, inner => inner.parentTypes, {
+    nullable: true
+  })
+  types: TypeNodeConnector[];
+
+  @ManyToOne(() => TypeNodeConnector, parent => parent.types, {
+    nullable: true
+  })
+  parentTypes: TypeNodeConnector | null;
 }

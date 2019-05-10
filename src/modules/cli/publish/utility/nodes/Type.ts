@@ -33,15 +33,9 @@ export class TypeNode {
       }
 
       type.startCommit = this.commit;
+      type.connector = connector;
 
-      // For TypeNode we have to append the node to the
-      // connector.node due to the one sided many-to-many
-      // relationship
-      const node = await this.transaction.save(type);
-      connector.node = [node];
-      await this.transaction.save(connector);
-
-      return node;
+      return this.transaction.save(type);
     } catch (err) {
       throw err;
     }

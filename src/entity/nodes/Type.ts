@@ -8,6 +8,7 @@ import {
 } from "typeorm";
 import { Commit } from "../Commit";
 import { FileEntity } from "../File";
+import { TypeNodeConnector } from "../connectors/Type";
 
 @Entity("type_nodes")
 export class TypeNodeEntity extends BaseEntity {
@@ -33,4 +34,7 @@ export class TypeNodeEntity extends BaseEntity {
     nullable: true
   })
   endCommit: Commit;
+
+  @ManyToOne(() => TypeNodeConnector, connector => connector.node)
+  connector: TypeNodeConnector;
 }

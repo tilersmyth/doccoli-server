@@ -29,10 +29,10 @@ export class SignatureConnector extends SignatureNode {
     }
   ];
 
-  async create(parent: any) {
+  async create(entity: any, _: any) {
     const connector: ConnectorRelation = new SignatureNodeConnector();
 
-    const { name } = parent.constructor;
+    const { name } = entity.constructor;
 
     const relations = SignatureConnector.relations.find(
       (relation: any) => relation.instance === name
@@ -43,7 +43,7 @@ export class SignatureConnector extends SignatureNode {
     }
 
     if (relations) {
-      connector[relations.key] = relations.array ? [parent] : parent;
+      connector[relations.key] = relations.array ? [entity] : entity;
     }
 
     return this.transaction.save(connector);

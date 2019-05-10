@@ -30,10 +30,10 @@ export class CommentConnector extends CommentNode {
     }
   ];
 
-  create = (parent: any) => {
+  create = (entity: any, _: any) => {
     const connector: ConnectorRelation = new CommentNodeConnector();
 
-    const { name } = parent.constructor;
+    const { name } = entity.constructor;
 
     const relations = CommentConnector.relations.find(
       (relation: any) => relation.instance === name
@@ -44,7 +44,7 @@ export class CommentConnector extends CommentNode {
     }
 
     if (relations) {
-      connector[relations.key] = relations.array ? [parent] : parent;
+      connector[relations.key] = relations.array ? [entity] : entity;
     }
 
     return this.transaction.save(connector);

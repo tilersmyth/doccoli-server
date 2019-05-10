@@ -4,9 +4,7 @@ import {
   SignatureConnector,
   CommentConnector,
   ParameterConnector,
-  TypeConnector,
-  TypesConnector,
-  TypeArgumentsConnector
+  TypeConnector
 } from "../utility/connectors";
 
 interface EntityRouter {
@@ -23,6 +21,6 @@ export const router: EntityRouter = {
   parameters: ParameterConnector,
   typeParameter: ParameterConnector,
   type: TypeConnector,
-  types: TypesConnector,
-  typeArguments: TypeArgumentsConnector
+  types: TypeConnector,
+  typeArguments: TypeConnector
 };

@@ -34,10 +34,10 @@ export class ChildrenConnector extends ChildrenNode {
     }
   ];
 
-  create(parent: any) {
+  create(entity: any, _: any) {
     const connector: ConnectorRelation = new ChildrenNodeConnector();
 
-    const { name } = parent.constructor;
+    const { name } = entity.constructor;
 
     const relations = ChildrenConnector.relations.find(
       (relation: any) => relation.instance === name
@@ -48,7 +48,7 @@ export class ChildrenConnector extends ChildrenNode {
     }
 
     if (relations) {
-      connector[relations.key] = relations.array ? [parent] : parent;
+      connector[relations.key] = relations.array ? [entity] : entity;
     }
 
     return this.transaction.save(connector);
