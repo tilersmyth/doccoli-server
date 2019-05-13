@@ -55,7 +55,7 @@ export const resolvers: ResolverMap = {
         lastName,
         email,
         password,
-        confirmed: true //true for testing
+        confirmed: true // true for testing
       });
 
       await user.save();

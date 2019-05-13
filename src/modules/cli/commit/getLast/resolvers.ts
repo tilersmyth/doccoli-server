@@ -13,14 +13,25 @@ export const resolvers: ResolverMap = {
           throw error;
         }
 
-        const commit = await Commit.findOne({
+        const lastCommitOnBranch = await Commit.findOne({
           where: { project, branch, complete: true },
           order: {
             createdAt: "DESC"
           }
         });
 
-        return { project, user, commit };
+        if (lastCommitOnBranch) {
+          return { project, user, commit: lastCommitOnBranch, branches: [] };
+        }
+
+        const allCommits = await Commit.find({
+          where: { project, complete: true },
+          select: ["branch"]
+        });
+
+        const branches = allCommits.map((commit: Commit) => commit.branch);
+
+        return { project, user, commit: null, branches };
       } catch (error) {
         return { error };
       }

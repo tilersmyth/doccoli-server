@@ -11,6 +11,7 @@ type cliLastCommitResponse {
   project: cliLastCommitProject!
   user: cliLastCommitUser!
   commit: Commit
+  branches: [String!]
   error: Error
 }
 
