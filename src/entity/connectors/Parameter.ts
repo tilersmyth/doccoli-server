@@ -3,7 +3,8 @@ import {
   BaseEntity,
   PrimaryGeneratedColumn,
   ManyToOne,
-  OneToMany
+  OneToMany,
+  OneToOne
 } from "typeorm";
 
 import { ParameterNodeEntity } from "../nodes/Parameter";
@@ -21,7 +22,7 @@ export class ParameterNodeConnector extends BaseEntity {
   })
   node: ParameterNodeEntity[];
 
-  @ManyToOne(() => TypeNodeConnector, type => type.parameters, {
+  @OneToOne(() => TypeNodeConnector, type => type.parameters, {
     nullable: true
   })
   type: TypeNodeConnector | null;

@@ -11,9 +11,9 @@ export class ModuleFileNode {
     this.transaction = transaction;
   }
 
-  find(project: any, args: any) {
+  find(project: any, path: any) {
     return this.transaction.findOne(FileEntity, {
-      where: { project, endCommit: null, ...args }
+      where: { project, path, endCommit: null }
     });
   }
 }

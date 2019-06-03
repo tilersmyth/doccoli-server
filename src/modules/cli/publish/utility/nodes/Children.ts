@@ -10,6 +10,10 @@ export class ChildrenNode {
     this.transaction = transaction;
   }
 
+  get nodeEntity() {
+    return ChildrenNodeEntity;
+  }
+
   save(connector: any, fields: any) {
     const children = new ChildrenNodeEntity();
     Object.assign(children, fields);

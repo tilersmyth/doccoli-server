@@ -12,6 +12,10 @@ export class ParameterConnector extends ParameterNode {
     this.transaction = transaction;
   }
 
+  get entity() {
+    return ParameterNodeConnector;
+  }
+
   async create(entity: any, _: any) {
     const newConnector = new ParameterNodeConnector();
 

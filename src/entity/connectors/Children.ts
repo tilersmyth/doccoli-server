@@ -4,8 +4,7 @@ import {
   PrimaryGeneratedColumn,
   ManyToOne,
   OneToMany,
-  OneToOne,
-  JoinColumn
+  OneToOne
 } from "typeorm";
 
 import { ChildrenNodeEntity } from "../nodes/Children";
@@ -28,9 +27,9 @@ export class ChildrenNodeConnector extends BaseEntity {
   @ManyToOne(() => ChildrenNodeConnector, parent => parent.children, {
     nullable: true
   })
-  parent: ChildrenNodeConnector | null;
+  parentChildren: ChildrenNodeConnector | null;
 
-  @OneToMany(() => ChildrenNodeConnector, children => children.parent, {
+  @OneToMany(() => ChildrenNodeConnector, children => children.parentChildren, {
     nullable: true
   })
   children: ChildrenNodeConnector[];
@@ -38,10 +37,9 @@ export class ChildrenNodeConnector extends BaseEntity {
   @OneToOne(() => CommentNodeConnector, comment => comment.children, {
     nullable: true
   })
-  @JoinColumn()
   comment: CommentNodeConnector | null;
 
-  @ManyToOne(() => TypeNodeConnector, type => type.children, {
+  @OneToOne(() => TypeNodeConnector, type => type.children, {
     nullable: true
   })
   type: TypeNodeConnector | null;

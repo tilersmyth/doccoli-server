@@ -24,17 +24,17 @@ export class TypeConnector extends TypeNode {
     {
       key: "children",
       instance: "ChildrenNodeConnector",
-      array: true
+      array: false
     },
     {
       key: "signatures",
       instance: "SignatureNodeConnector",
-      array: true
+      array: false
     },
     {
       key: "parameters",
       instance: "ParameterNodeConnector",
-      array: true
+      array: false
     },
     {
       key: "type",
@@ -42,6 +42,10 @@ export class TypeConnector extends TypeNode {
       array: false
     }
   ];
+
+  get entity() {
+    return TypeNodeConnector;
+  }
 
   async create(entity: any, field: any) {
     try {

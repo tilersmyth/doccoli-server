@@ -4,7 +4,7 @@ import { Commit } from "../../../../entity";
 export class PublishCommit {
   project: any;
   commit: { sha: string; branch: string };
-  progress: { nodesTotal: number; nodesPublished: number };
+  progress: { total: number; published: number };
   transaction: EntityManager;
 
   constructor(
@@ -40,7 +40,7 @@ export class PublishCommit {
   async save(commit?: any) {
     try {
       const { sha, branch } = this.commit;
-      const { nodesPublished, nodesTotal } = this.progress;
+      const { total, published } = this.progress;
 
       if (!commit) {
         // Get count of commits within current branch
@@ -52,23 +52,23 @@ export class PublishCommit {
         newCommit.project = this.project;
         newCommit.sha = sha;
         newCommit.branch = branch;
-        newCommit.nodesPublished = nodesPublished;
-        newCommit.nodesTotal = nodesTotal;
-        newCommit.complete = nodesTotal === nodesPublished ? true : false;
+        newCommit.published = published;
+        newCommit.total = total;
+        newCommit.complete = total === published ? true : false;
         newCommit.index = countByBranch + 1;
 
         return this.transaction.save(newCommit);
       }
 
-      if (commit.nodesTotal !== nodesTotal) {
+      if (commit.total !== total) {
         throw Error("file publishing quanitity inconsistency");
       }
 
-      if (nodesTotal === nodesPublished) {
+      if (total === published) {
         commit.complete = true;
       }
 
-      commit.nodesPublished = nodesPublished;
+      commit.published = published;
 
       return await this.transaction.save(commit);
     } catch (err) {

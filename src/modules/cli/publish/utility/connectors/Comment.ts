@@ -30,6 +30,10 @@ export class CommentConnector extends CommentNode {
     }
   ];
 
+  get entity() {
+    return CommentNodeConnector;
+  }
+
   create = (entity: any, _: any) => {
     const connector: ConnectorRelation = new CommentNodeConnector();
 

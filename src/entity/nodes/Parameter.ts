@@ -21,10 +21,13 @@ export class ParameterNodeEntity extends BaseEntity {
   @Column("text")
   kind: string;
 
+  @Column()
+  position: number;
+
   @CreateDateColumn()
   createdAt: Date;
 
-  @ManyToOne(() => Commit)
+  @ManyToOne(() => Commit, { nullable: false })
   startCommit: Commit;
 
   @ManyToOne(() => Commit, {

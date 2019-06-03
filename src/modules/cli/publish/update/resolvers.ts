@@ -3,16 +3,14 @@ import { getConnection } from "typeorm";
 import { ResolverMap } from "../../../../types/graphql-utils";
 
 import { PublishCommit } from "../utility/Commit";
+import { UpdateNode } from "./Update";
 import { ModuleFileNode } from "../utility/nodes/File";
-
-import { NodeQuery } from "./Query";
-import { NodeUpdatePublish } from "./Publish";
 
 interface PublishArgs {
   commit: { sha: string; branch: string };
   version: string;
   file: any;
-  progress: { nodesTotal: number; nodesPublished: number };
+  progress: { total: number; published: number };
 }
 
 export const resolvers: ResolverMap = {
@@ -42,47 +40,72 @@ export const resolvers: ResolverMap = {
           const currentCommit = await moduleCommit.find();
 
           // This node is already updated, skip
-          if (
-            currentCommit &&
-            currentCommit.nodesPublished >= progress.nodesPublished
-          ) {
+          if (currentCommit && currentCommit.published >= progress.published) {
             return { created: true };
           }
 
           const commitModule = await moduleCommit.save(currentCommit);
 
+          // if (file.path === "src/find-options/FindOneOptions.ts") {
           const fileNode = new ModuleFileNode(commitModule, transaction);
-          const fileModule = await fileNode.find(project, file);
+          const fileModule = await fileNode.find(project, file.path);
 
           if (!fileModule) {
-            throw Error(`file not found: ${file.path}`);
+            throw Error(`File not found: ${file.path}`);
           }
 
-          const nodeQuery = new NodeQuery(fileModule);
+          console.log(commitModule);
 
-          const publish = new NodeUpdatePublish(commitModule, transaction);
+          const updateNode = new UpdateNode(commitModule, transaction);
 
-          for (const update of file.updates) {
-            const queryBuilder = nodeQuery.build(update.query);
-            const nestedResults = await queryBuilder.getOne();
+          const entities = [
+            { id: file.id, entity: "file", entityId: fileModule.id }
+          ];
 
-            if (!nestedResults) {
-              throw Error(
-                "Unable to locate target for update node with provided query"
-              );
-            }
+          const queryResults = await file.query.reduce(
+            updateNode.find,
+            Promise.resolve({ entities, error: null })
+          );
 
-            const nodeConnector = nodeQuery.results(
-              update.query,
-              nestedResults
-            );
-
-            // To do: include options to handle added/delete nodes
-
-            if (update.kind === "modified") {
-              await publish.save(nodeConnector, update.newNode);
-            }
+          if (queryResults.error) {
+            return {
+              error: {
+                path: "update_fail",
+                message: `Update failed: ${queryResults.error}`
+              }
+            };
           }
+
+          //   const queryResults = await find.getOne();
+
+          // file.query.reduce(query.update, queryResults);
+          //   }
+
+          // const nodeQuery = new NodeQuery(fileModule);
+
+          // const publish = new NodeUpdatePublish(commitModule, transaction);
+
+          // for (const update of file.updates) {
+          //   const queryBuilder = nodeQuery.build(update.query);
+          //   const nestedResults = await queryBuilder.getOne();
+
+          //   if (!nestedResults) {
+          //     throw Error(
+          //       "Unable to locate target for update node with provided query"
+          //     );
+          //   }
+
+          //   const nodeConnector = nodeQuery.results(
+          //     update.query,
+          //     nestedResults
+          //   );
+
+          //   // To do: include options to handle added/delete nodes
+
+          //   if (update.kind === "modified") {
+          //     await publish.save(nodeConnector, update.newNode);
+          //   }
+          // }
 
           return { success: true };
         } catch (error) {

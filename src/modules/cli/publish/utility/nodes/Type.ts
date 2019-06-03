@@ -10,6 +10,10 @@ export class TypeNode {
     this.transaction = transaction;
   }
 
+  get nodeEntity() {
+    return TypeNodeEntity;
+  }
+
   async save(connector: any, fields: any) {
     try {
       const type = new TypeNodeEntity();

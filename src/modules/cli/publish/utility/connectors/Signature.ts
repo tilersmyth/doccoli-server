@@ -29,6 +29,10 @@ export class SignatureConnector extends SignatureNode {
     }
   ];
 
+  get entity() {
+    return SignatureNodeConnector;
+  }
+
   async create(entity: any, _: any) {
     const connector: ConnectorRelation = new SignatureNodeConnector();
 

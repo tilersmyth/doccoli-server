@@ -23,7 +23,7 @@ export class ChildrenConnector extends ChildrenNode {
       array: false
     },
     {
-      key: "parent",
+      key: "parentChildren",
       instance: "ChildrenNodeConnector",
       array: false
     },
@@ -33,6 +33,10 @@ export class ChildrenConnector extends ChildrenNode {
       array: false
     }
   ];
+
+  get entity() {
+    return ChildrenNodeConnector;
+  }
 
   create(entity: any, _: any) {
     const connector: ConnectorRelation = new ChildrenNodeConnector();

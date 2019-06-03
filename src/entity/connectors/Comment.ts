@@ -3,7 +3,8 @@ import {
   BaseEntity,
   PrimaryGeneratedColumn,
   OneToOne,
-  OneToMany
+  OneToMany,
+  JoinColumn
 } from "typeorm";
 
 import { CommentNodeEntity } from "../nodes/Comment";
@@ -23,10 +24,12 @@ export class CommentNodeConnector extends BaseEntity {
   @OneToOne(() => ChildrenNodeConnector, children => children.comment, {
     nullable: true
   })
+  @JoinColumn()
   children: ChildrenNodeConnector | null;
 
   @OneToOne(() => SignatureNodeConnector, signature => signature.comment, {
     nullable: true
   })
+  @JoinColumn()
   signatures: SignatureNodeConnector | null;
 }

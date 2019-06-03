@@ -3,7 +3,9 @@ import {
   BaseEntity,
   PrimaryGeneratedColumn,
   OneToMany,
-  ManyToOne
+  ManyToOne,
+  OneToOne,
+  JoinColumn
 } from "typeorm";
 
 import { ChildrenNodeConnector } from "./Children";
@@ -21,20 +23,23 @@ export class TypeNodeConnector extends BaseEntity {
   })
   node: TypeNodeEntity[];
 
-  @OneToMany(() => ChildrenNodeConnector, children => children.type, {
+  @OneToOne(() => ChildrenNodeConnector, children => children.type, {
     nullable: true
   })
-  children: ChildrenNodeConnector[];
+  @JoinColumn()
+  children: ChildrenNodeConnector | null;
 
-  @OneToMany(() => ParameterNodeConnector, parameter => parameter.type, {
+  @OneToOne(() => ParameterNodeConnector, parameter => parameter.type, {
     nullable: true
   })
-  parameters: ParameterNodeConnector[];
+  @JoinColumn()
+  parameters: ParameterNodeConnector | null;
 
-  @OneToMany(() => SignatureNodeConnector, signature => signature.type, {
+  @OneToOne(() => SignatureNodeConnector, signature => signature.type, {
     nullable: true
   })
-  signatures: SignatureNodeConnector[];
+  @JoinColumn()
+  signatures: SignatureNodeConnector | null;
 
   @OneToMany(() => TypeNodeConnector, inner => inner.parentTypeArguments, {
     nullable: true

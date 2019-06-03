@@ -23,7 +23,10 @@ export class SignatureNodeEntity extends BaseEntity {
   @CreateDateColumn()
   createdAt: Date;
 
-  @ManyToOne(() => Commit)
+  @Column({ nullable: true })
+  position: number;
+
+  @ManyToOne(() => Commit, { nullable: false })
   startCommit: Commit;
 
   @ManyToOne(() => Commit, {

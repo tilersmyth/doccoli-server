@@ -16,7 +16,7 @@ export const resolvers: ResolverMap = {
           const moduleCommit = new PublishCommit(
             project,
             commit,
-            { nodesPublished: 0, nodesTotal: files.length },
+            { published: 0, total: files.length },
             transaction
           );
 

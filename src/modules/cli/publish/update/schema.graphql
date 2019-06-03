@@ -1,29 +1,38 @@
-input NodeUpdateQueryArgs {
-  key: String
-  value: String
-}
-
-input NodeUpdateQuery {
-  entity: String!
-  args: [NodeUpdateQueryArgs!]
-}
-
-input NodeUpdateEntity {
+input NodeUpdateTypes {
+  children: ModuleChildrenInput
+  indexSignature: ModuleChildSignatureInput
+  getSignature: ModuleChildSignatureInput
+  signatures: ModuleChildSignatureInput
+  parameters: ModuleChildParametersInput
+  typeParameter: ModuleChildParametersInput
   type: ModuleChildTypeInput
   types: ModuleChildTypeInput
   comment: ModuleChildCommentInput
   typeArguments: ModuleChildTypeInput
 }
 
-input NodeUpdate {
-  kind: String!
-  query: [NodeUpdateQuery!]
-  newNode: [NodeUpdateQueryArgs!]
+input FileQueryArgs {
+  key: String!
+  value: String!
 }
 
-input FileUpdate {
+input FileQueryUpdate {
+  type: String!
+  node: NodeUpdateTypes!
+}
+
+input NodeQuery {
+  id: String!
+  entity: String!
+  args: [FileQueryArgs!]
+  parent: String!
+  update: FileQueryUpdate
+}
+
+input FileQuery {
+  id: String!
   path: String!
-  updates: [NodeUpdate!]
+  query: [NodeQuery!]
 }
 
 type PublishUpdateResponse {
@@ -35,7 +44,7 @@ type Mutation {
   cliPublishUpdate(
     commit: ModuleCommit!
     version: String!
-    file: FileUpdate!
+    file: FileQuery!
     progress: PublishProgress!
   ): PublishUpdateResponse!
 }

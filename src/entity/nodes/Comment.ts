@@ -24,7 +24,7 @@ export class CommentNodeEntity extends BaseEntity {
   @CreateDateColumn()
   createdAt: Date;
 
-  @ManyToOne(() => Commit)
+  @ManyToOne(() => Commit, { nullable: false })
   startCommit: Commit;
 
   @ManyToOne(() => Commit, {

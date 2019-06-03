@@ -4,8 +4,7 @@ import {
   PrimaryGeneratedColumn,
   OneToMany,
   ManyToOne,
-  OneToOne,
-  JoinColumn
+  OneToOne
 } from "typeorm";
 
 import { SignatureNodeEntity } from "../nodes/Signature";
@@ -27,10 +26,9 @@ export class SignatureNodeConnector extends BaseEntity {
   @OneToOne(() => CommentNodeConnector, comment => comment.signatures, {
     nullable: true
   })
-  @JoinColumn()
   comment: CommentNodeConnector | null;
 
-  @ManyToOne(() => TypeNodeConnector, type => type.signatures, {
+  @OneToOne(() => TypeNodeConnector, type => type.signatures, {
     nullable: true
   })
   type: TypeNodeConnector | null;

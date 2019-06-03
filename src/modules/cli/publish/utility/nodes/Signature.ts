@@ -10,6 +10,10 @@ export class SignatureNode {
     this.transaction = transaction;
   }
 
+  get nodeEntity() {
+    return SignatureNodeEntity;
+  }
+
   save(connector: any, fields: any) {
     const signature = new SignatureNodeEntity();
     Object.assign(signature, fields);

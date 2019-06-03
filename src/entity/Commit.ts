@@ -25,10 +25,10 @@ export class Commit extends BaseEntity {
   index: number;
 
   @Column()
-  nodesPublished: number;
+  published: number;
 
   @Column()
-  nodesTotal: number;
+  total: number;
 
   @Column({ default: false })
   complete: boolean;

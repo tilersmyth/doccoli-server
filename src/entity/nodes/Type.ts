@@ -21,13 +21,16 @@ export class TypeNodeEntity extends BaseEntity {
   @Column("text")
   type: string;
 
+  @Column({ nullable: true })
+  position: number;
+
   @CreateDateColumn()
   createdAt: Date;
 
   @ManyToOne(() => FileEntity, { nullable: true })
   file: FileEntity;
 
-  @ManyToOne(() => Commit)
+  @ManyToOne(() => Commit, { nullable: false })
   startCommit: Commit;
 
   @ManyToOne(() => Commit, {

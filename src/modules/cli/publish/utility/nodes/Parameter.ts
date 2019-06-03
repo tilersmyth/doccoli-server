@@ -10,6 +10,10 @@ export class ParameterNode {
     this.transaction = transaction;
   }
 
+  get nodeEntity() {
+    return ParameterNodeEntity;
+  }
+
   save(connector: any, fields: any) {
     const parameter = new ParameterNodeEntity();
     Object.assign(parameter, fields);

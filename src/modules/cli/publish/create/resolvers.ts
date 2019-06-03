@@ -10,7 +10,7 @@ interface PublishArgs {
   file: any;
   version: string;
   commit: { sha: string; branch: string };
-  progress: { nodesTotal: number; nodesPublished: number };
+  progress: { total: number; published: number };
 }
 
 export const resolvers: ResolverMap = {
@@ -35,10 +35,7 @@ export const resolvers: ResolverMap = {
 
           const currentCommit = await moduleCommit.find();
 
-          if (
-            currentCommit &&
-            currentCommit.nodesPublished >= progress.nodesPublished
-          ) {
+          if (currentCommit && currentCommit.published >= progress.published) {
             return { created: true };
           }
 

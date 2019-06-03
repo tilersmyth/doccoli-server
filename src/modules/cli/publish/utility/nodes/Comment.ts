@@ -10,6 +10,10 @@ export class CommentNode {
     this.transaction = transaction;
   }
 
+  get nodeEntity() {
+    return CommentNodeEntity;
+  }
+
   save(connector: any, fields: any) {
     const comment = new CommentNodeEntity();
     Object.assign(comment, fields);

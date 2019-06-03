@@ -48,7 +48,7 @@ export class EntityBulk {
 
   async insert(project: any, fileNode: any) {
     const fileModule = new router.file(this.commit, this.transaction);
-    const file = await fileModule.find(project, fileNode);
+    const file = await fileModule.find(project, fileNode.path);
 
     await Promise.all(
       fileNode.children.map(this.map.bind(null, file, "children"))

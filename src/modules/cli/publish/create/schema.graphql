@@ -1,12 +1,14 @@
 input ModuleChildParametersInput {
   name: String!
   kind: String
+  position: Int!
   type: ModuleChildTypeInput
 }
 
 input ModuleChildSignatureInput {
   name: String!
   kind: String!
+  position: Int!
   type: ModuleChildTypeInput!
   comment: ModuleChildCommentInput
   parameters: [ModuleChildParametersInput!]
@@ -14,9 +16,10 @@ input ModuleChildSignatureInput {
 }
 
 input ModuleChildTypeInput {
-  type: String!
+  type: String
   name: String
   file: String
+  position: Int
   types: [ModuleChildTypeInput!]
   typeArguments: [ModuleChildTypeInput!]
 }
@@ -30,6 +33,7 @@ input ModuleChildrenInput {
   name: String!
   tagged: Boolean
   kind: String
+  position: Int!
   comment: ModuleChildCommentInput
   children: [ModuleChildrenInput!]
   type: ModuleChildTypeInput
@@ -43,6 +47,7 @@ input ModuleFileInput {
   name: String!
   kind: String
   path: String!
+  position: Int
   children: [ModuleChildrenInput!]
 }
 
@@ -52,8 +57,8 @@ input ModuleCommit {
 }
 
 input PublishProgress {
-  nodesPublished: Int!
-  nodesTotal: Int!
+  published: Int!
+  total: Int!
 }
 
 type CliPublishProjectResponse {
