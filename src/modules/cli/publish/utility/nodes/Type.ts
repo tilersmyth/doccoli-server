@@ -1,5 +1,9 @@
 import { EntityManager } from "typeorm";
-import { TypeNodeEntity, FileEntity } from "../../../../../entity";
+import {
+  TypeNodeEntity,
+  FileEntity,
+  TypePositionEntity
+} from "../../../../../entity";
 
 export class TypeNode {
   commit: any;
@@ -10,11 +14,19 @@ export class TypeNode {
     this.transaction = transaction;
   }
 
+  private position = async (connector: any, position: number) => {
+    const nodePosition = new TypePositionEntity();
+    nodePosition.connectorId = connector.id;
+    nodePosition.position = position;
+    nodePosition.startCommit = this.commit;
+    return this.transaction.save(nodePosition);
+  };
+
   get nodeEntity() {
     return TypeNodeEntity;
   }
 
-  async save(connector: any, fields: any) {
+  save = async (connector: any, fields: any) => {
     try {
       const type = new TypeNodeEntity();
       Object.assign(type, fields);
@@ -39,9 +51,14 @@ export class TypeNode {
       type.startCommit = this.commit;
       type.connector = connector;
 
+      if (typeof fields.position !== "undefined") {
+        const position = await this.position(connector, fields.position);
+        type.position = [position];
+      }
+
       return this.transaction.save(type);
     } catch (err) {
       throw err;
     }
-  }
+  };
 }

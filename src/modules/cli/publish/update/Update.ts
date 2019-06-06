@@ -27,7 +27,7 @@ export class UpdateNode extends QueryNode {
           return;
 
         case "modified":
-          await this.modify(entityId, update.node);
+          //   await this.modify(entityId, update.node);
           return;
 
         case "added":

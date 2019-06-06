@@ -4,11 +4,13 @@ import {
   BaseEntity,
   PrimaryGeneratedColumn,
   CreateDateColumn,
-  ManyToOne
+  ManyToOne,
+  OneToMany
 } from "typeorm";
 
 import { Commit } from "../Commit";
 import { ChildrenNodeConnector } from "../connectors/Children";
+import { ChildrenPositionEntity } from "./position";
 
 @Entity("children_nodes")
 export class ChildrenNodeEntity extends BaseEntity {
@@ -24,11 +26,13 @@ export class ChildrenNodeEntity extends BaseEntity {
   @Column("text")
   kind: string;
 
-  @Column()
-  position: number;
-
   @CreateDateColumn()
   createdAt: Date;
+
+  @OneToMany(() => ChildrenPositionEntity, children => children.node, {
+    nullable: true
+  })
+  position: ChildrenPositionEntity[];
 
   @ManyToOne(() => Commit, { nullable: false })
   startCommit: Commit;

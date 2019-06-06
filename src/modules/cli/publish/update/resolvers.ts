@@ -54,8 +54,6 @@ export const resolvers: ResolverMap = {
             throw Error(`File not found: ${file.path}`);
           }
 
-          console.log(commitModule);
-
           const updateNode = new UpdateNode(commitModule, transaction);
 
           const entities = [
@@ -75,37 +73,6 @@ export const resolvers: ResolverMap = {
               }
             };
           }
-
-          //   const queryResults = await find.getOne();
-
-          // file.query.reduce(query.update, queryResults);
-          //   }
-
-          // const nodeQuery = new NodeQuery(fileModule);
-
-          // const publish = new NodeUpdatePublish(commitModule, transaction);
-
-          // for (const update of file.updates) {
-          //   const queryBuilder = nodeQuery.build(update.query);
-          //   const nestedResults = await queryBuilder.getOne();
-
-          //   if (!nestedResults) {
-          //     throw Error(
-          //       "Unable to locate target for update node with provided query"
-          //     );
-          //   }
-
-          //   const nodeConnector = nodeQuery.results(
-          //     update.query,
-          //     nestedResults
-          //   );
-
-          //   // To do: include options to handle added/delete nodes
-
-          //   if (update.kind === "modified") {
-          //     await publish.save(nodeConnector, update.newNode);
-          //   }
-          // }
 
           return { success: true };
         } catch (error) {

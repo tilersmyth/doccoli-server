@@ -8,7 +8,6 @@ interface ConnectorRelation {
 }
 
 export class ChildrenConnector extends ChildrenNode {
-  commit: any;
   transaction: EntityManager;
 
   constructor(commit: any, transaction: EntityManager) {

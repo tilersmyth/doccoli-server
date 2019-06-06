@@ -26,6 +26,7 @@ input NodeQuery {
   entity: String!
   args: [FileQueryArgs!]
   parent: String!
+  position: Int
   update: FileQueryUpdate
 }
 

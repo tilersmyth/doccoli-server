@@ -4,11 +4,13 @@ import {
   BaseEntity,
   PrimaryGeneratedColumn,
   CreateDateColumn,
-  ManyToOne
+  ManyToOne,
+  OneToMany
 } from "typeorm";
 import { Commit } from "../Commit";
 import { FileEntity } from "../File";
 import { TypeNodeConnector } from "../connectors/Type";
+import { TypePositionEntity } from "./position";
 
 @Entity("type_nodes")
 export class TypeNodeEntity extends BaseEntity {
@@ -21,11 +23,13 @@ export class TypeNodeEntity extends BaseEntity {
   @Column("text")
   type: string;
 
-  @Column({ nullable: true })
-  position: number;
-
   @CreateDateColumn()
   createdAt: Date;
+
+  @OneToMany(() => TypePositionEntity, type => type.node, {
+    nullable: true
+  })
+  position: TypePositionEntity[];
 
   @ManyToOne(() => FileEntity, { nullable: true })
   file: FileEntity;

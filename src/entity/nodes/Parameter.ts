@@ -4,11 +4,13 @@ import {
   BaseEntity,
   PrimaryGeneratedColumn,
   CreateDateColumn,
-  ManyToOne
+  ManyToOne,
+  OneToMany
 } from "typeorm";
 
 import { Commit } from "../Commit";
 import { ParameterNodeConnector } from "../connectors/Parameter";
+import { ParameterPositionEntity } from "./position";
 
 @Entity("parameter_nodes")
 export class ParameterNodeEntity extends BaseEntity {
@@ -21,11 +23,13 @@ export class ParameterNodeEntity extends BaseEntity {
   @Column("text")
   kind: string;
 
-  @Column()
-  position: number;
-
   @CreateDateColumn()
   createdAt: Date;
+
+  @OneToMany(() => ParameterPositionEntity, parameter => parameter.node, {
+    nullable: true
+  })
+  position: ParameterPositionEntity[];
 
   @ManyToOne(() => Commit, { nullable: false })
   startCommit: Commit;

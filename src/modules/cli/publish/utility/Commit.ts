@@ -42,6 +42,8 @@ export class PublishCommit {
       const { sha, branch } = this.commit;
       const { total, published } = this.progress;
 
+      // const published = 0;
+
       if (!commit) {
         // Get count of commits within current branch
         const countByBranch = await Commit.count({

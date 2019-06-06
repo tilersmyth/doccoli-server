@@ -4,10 +4,12 @@ import {
   BaseEntity,
   PrimaryGeneratedColumn,
   CreateDateColumn,
-  ManyToOne
+  ManyToOne,
+  OneToMany
 } from "typeorm";
 import { Commit } from "../Commit";
 import { SignatureNodeConnector } from "../connectors/Signature";
+import { SignaturePositionEntity } from "./position";
 
 @Entity("signature_nodes")
 export class SignatureNodeEntity extends BaseEntity {
@@ -23,8 +25,10 @@ export class SignatureNodeEntity extends BaseEntity {
   @CreateDateColumn()
   createdAt: Date;
 
-  @Column({ nullable: true })
-  position: number;
+  @OneToMany(() => SignaturePositionEntity, signature => signature.node, {
+    nullable: true
+  })
+  position: SignaturePositionEntity[];
 
   @ManyToOne(() => Commit, { nullable: false })
   startCommit: Commit;

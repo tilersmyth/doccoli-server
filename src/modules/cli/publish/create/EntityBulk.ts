@@ -15,7 +15,7 @@ export class EntityBulk {
     await this.insertNodes(parent, entity, node);
   };
 
-  private insertNodes = async (parent: any, name: string, node: any) => {
+  insertNodes = async (parent: any, name: string, node: any) => {
     try {
       if (!router[name]) {
         throw Error(`"${name}" entity not found`);

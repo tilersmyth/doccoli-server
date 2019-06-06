@@ -2,6 +2,8 @@
 import { EntityManager } from "typeorm";
 
 import { router } from "../create/entityRouter";
+import { PositionEntities } from "../utility/entity-routers/Position";
+import { EntityBulk } from "../create/EntityBulk";
 
 export class QueryNode {
   constructor(private commit: any, private transaction: EntityManager) {
@@ -31,7 +33,7 @@ export class QueryNode {
   private static parseNode = (node: any) => {
     const entity = Object.keys(node)[0];
     const value = node[entity];
-    const position = value["position"] ? value["position"] : null;
+    const position = value["position"];
 
     return { entity, node: value, position };
   };
@@ -55,16 +57,25 @@ export class QueryNode {
 
       const parentEntity = this.parentEntity(query.entity, parent.entity);
 
-      const entity: any = await this.transaction
+      const entityQuery: any = this.transaction
         .createQueryBuilder(entityInstance, query.id)
         .select(`${query.id}.id`)
         .where(`${query.id}.${parentEntity} = '${parent.entityId}'`)
-        .innerJoin(
+        .innerJoinAndSelect(
           `${query.id}.node`,
           `${query.id}Node`,
           `${query.id}Node.endCommit is NULL AND ${args}`
-        )
-        .getOne();
+        );
+
+      if (typeof query.position !== "undefined") {
+        entityQuery.innerJoinAndSelect(
+          `${query.id}Node.position`,
+          "position",
+          `position.position = ${query.position}`
+        );
+      }
+
+      const entity = await entityQuery.getOne();
 
       if (!entity) {
         throw Error(`${query.entity} returned undefined`);
@@ -129,22 +140,70 @@ export class QueryNode {
   insert = async (entityId: string, node: any) => {
     const parsed = QueryNode.parseNode(node);
 
-    const entityInstance = new router[parsed.entity](
-      this.commit,
-      this.transaction
-    ).nodeEntity;
+    if (typeof parsed.position !== "undefined") {
+      const connectorInstance = new router[parsed.entity](
+        this.commit,
+        this.transaction
+      ).entity;
 
-    if (parsed.position !== null) {
-      await this.transaction
-        .createQueryBuilder(entityInstance, "node")
-        .update()
-        .where("node.connector = :id", { id: entityId })
-        .andWhere("node.endCommit IS NULL")
-        .andWhere(`node.position >= ${parsed.position}`)
-        .set({ position: () => "position + 1" })
-        .execute();
+      const positionEntity = new PositionEntities(parsed.entity).route();
+
+      const connectorEntity: any = await this.transaction
+        .createQueryBuilder(connectorInstance, "connector")
+        .where("connector.id = :id", { id: entityId })
+        .innerJoinAndSelect("connector.types", "types")
+        .innerJoinAndSelect(
+          "types.node",
+          "typesNode",
+          "typesNode.endCommit IS NULL"
+        )
+        .getOne();
+
+      const connectorNodes = connectorEntity.types;
+
+      const connectorIds = connectorNodes.map(
+        (connectors: any) => connectors.id
+      );
+
+      const positionEntities = await this.transaction
+        .createQueryBuilder(positionEntity, "position")
+        .where("position.connectorId IN (:...connectorIds)", { connectorIds })
+        .andWhere("position.endCommit IS NULL")
+        .andWhere(`position.position >= ${parsed.position}`)
+        .innerJoinAndSelect("position.node", "positionNode")
+        .getMany();
+
+      await Promise.all(
+        positionEntities.map(async (entity: any) => {
+          const positionCopy = Object.assign(
+            Object.create(Object.getPrototypeOf(entity)),
+            entity
+          );
+
+          entity.endCommit = this.commit;
+
+          await this.transaction.save(entity);
+
+          // Strip values unique to old position
+          delete positionCopy.id;
+          delete positionCopy.createdAt;
+
+          positionCopy.startCommit = this.commit;
+          positionCopy.position = positionCopy.position + 1;
+
+          await this.transaction.save(positionCopy);
+
+          return entity;
+        })
+      );
+
+      await new EntityBulk(this.commit, this.transaction).insertNodes(
+        connectorEntity,
+        parsed.entity,
+        parsed.node
+      );
     }
 
-    console.log("INSERT", entityId, parsed);
+    console.log("INSERT", entityId);
   };
 }
